@@ -1,6 +1,20 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Spotify for Fedora KDE
+# --------------------------
+# Spotify is installed via Flatpak, which is the recommended method on Fedora.
+# Flatpak provides:
+# - Automatic updates through KDE Discover or 'flatpak update'
+# - Sandboxed security
+# - Consistent versions across distributions
+# - Easy maintenance through standard Flatpak tooling
+#
+# Note: Spotify also offers an official RPM repository, but Flatpak is
+# preferred for better integration with Fedora's software management.
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -22,12 +36,29 @@ fi
 
 print_tool_setup_start "Spotify"
 
-# Install Spotify via snap if not already installed
-if ! command -v spotify &> /dev/null; then
-    print_info_message "Installing Spotify via snap"
-    sudo snap install spotify
+# --------------------------
+# Install Spotify via Flatpak
+# --------------------------
+
+# Check if Spotify is already installed
+if ! flatpak list 2>/dev/null | grep -q "com.spotify.Client"; then
+    print_info_message "Installing Spotify via Flatpak"
+    
+    # Install Spotify from Flathub
+    print_info_message "Installing Spotify from Flathub"
+    flatpak install -y flathub com.spotify.Client
+    
+    print_info_message "Spotify installed successfully"
+    print_info_message "You can launch Spotify from your application menu or run:"
+    print_info_message "  flatpak run com.spotify.Client"
+    echo ""
+    print_info_message "To update Spotify in the future, run:"
+    print_info_message "  flatpak update com.spotify.Client"
+    print_info_message "Or update all Flatpak apps with:"
+    print_info_message "  flatpak update"
 else
     print_info_message "Spotify is already installed. Skipping installation."
+    print_info_message "Installed version: $(flatpak info com.spotify.Client 2>/dev/null | grep Version | awk '{print $2}')"
 fi
 
 print_tool_setup_complete "Spotify"

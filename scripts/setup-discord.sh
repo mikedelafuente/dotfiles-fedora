@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Discord for Fedora KDE
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -21,7 +25,7 @@ fi
 # --------------------------
 
 # --------------------------
-# Setup Discord
+# Install Discord
 # --------------------------
 
 print_line_break "Installing Discord"
@@ -33,16 +37,28 @@ if command -v discord &> /dev/null; then
     exit 0
 fi
 
-# Download the latest Discord .deb package
-DISCORD_DEB_URL="https://discord.com/api/download?platform=linux&format=deb"
-TEMP_DEB_FILE="/tmp/discord.deb"
+# Install Discord via Flatpak (recommended method for Fedora)
+print_info_message "Installing Discord via Flatpak"
 
-wget -O "$TEMP_DEB_FILE" "$DISCORD_DEB_URL"
+# Ensure Flatpak is installed
+if ! command -v flatpak &> /dev/null; then
+    print_info_message "Installing Flatpak first"
+    sudo dnf install -y flatpak
+fi
 
-# Install the downloaded package
-sudo apt install -y "$TEMP_DEB_FILE"
+# Add Flathub repository if not already added
+if ! flatpak remotes | grep -q flathub; then
+    print_info_message "Adding Flathub repository"
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+fi
 
-# Clean up
-rm -f "$TEMP_DEB_FILE"
+# Install Discord from Flathub
+print_info_message "Installing Discord from Flathub"
+flatpak install -y flathub com.discordapp.Discord
+
+# It is possible that this is the wrong flatpak and you may need to try:
+# flatpak install -y discord
+
 
 print_line_break "Discord installation completed."
+print_info_message "You can launch Discord with: flatpak run com.discordapp.Discord"

@@ -1,6 +1,17 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Postman for Fedora KDE
+# --------------------------
+# Postman is installed via Flatpak, which is the recommended method on Fedora.
+# Flatpak provides:
+# - Automatic updates through KDE Discover or 'flatpak update'
+# - Sandboxed security
+# - Consistent versions across distributions
+# - Easy maintenance through standard Flatpak tooling
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -22,12 +33,29 @@ fi
 
 print_tool_setup_start "Postman"
 
-# Install Postman via snap if not already installed
-if ! command -v postman &> /dev/null; then
-    print_info_message "Installing Postman via snap"
-    sudo snap install postman
+# --------------------------
+# Install Postman via Flatpak
+# --------------------------
+
+# Check if Postman is already installed
+if ! flatpak list 2>/dev/null | grep -q "com.getpostman.Postman"; then
+    print_info_message "Installing Postman via Flatpak"
+    
+    # Install Postman from Flathub
+    print_info_message "Installing Postman from Flathub"
+    flatpak install -y flathub com.getpostman.Postman
+    
+    print_info_message "Postman installed successfully"
+    print_info_message "You can launch Postman from your application menu or run:"
+    print_info_message "  flatpak run com.getpostman.Postman"
+    echo ""
+    print_info_message "To update Postman in the future, run:"
+    print_info_message "  flatpak update com.getpostman.Postman"
+    print_info_message "Or update all Flatpak apps with:"
+    print_info_message "  flatpak update"
 else
     print_info_message "Postman is already installed. Skipping installation."
+    print_info_message "Installed version: $(flatpak info com.getpostman.Postman 2>/dev/null | grep Version | awk '{print $2}')"
 fi
 
 print_tool_setup_complete "Postman"

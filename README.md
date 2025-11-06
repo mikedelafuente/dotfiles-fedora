@@ -1,6 +1,6 @@
-# Dotfiles for Pop!_OS
+# Dotfiles for Fedora
 
-This repository contains my personal dotfiles and configuration for Pop!_OS. The goal of this project is to provide a streamlined setup and configuration for my development environment.
+This repository contains my personal dotfiles and configuration for Fedora. The goal of this project is to provide a streamlined setup and configuration for my development environment.
 
 ## Table of Contents
 
@@ -41,9 +41,6 @@ The following configuration files are included in this repository:
 The following scripts are included to automate setup and configuration:
 
 - **scripts/bootstrap.sh**: Sets up the environment.
-- **scripts/install-pop-os.sh**: Automates the installation of Pop!_OS.
-- **scripts/setup-neovim.sh**: Sets up Neovim with desired plugins.
-- **scripts/link-dotfiles.sh**: Creates symbolic links for the dotfiles in the home directory.
 
 ## License
 

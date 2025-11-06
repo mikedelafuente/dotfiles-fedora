@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Bash Shell for Fedora KDE
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -21,14 +25,22 @@ fi
 # --------------------------
 
 print_tool_setup_start "Bash"
-# Install Bash if not already installed
+
+# --------------------------
+# Install Bash
+# --------------------------
+
+# Install Bash if not already installed (usually pre-installed on Fedora)
 if ! command -v bash &> /dev/null; then
-    print_info_message "Installing Bash"
-    sudo apt install -y bash
+    print_info_message "Installing Bash via DNF"
+    sudo dnf install -y bash
 else
     print_info_message "Bash is already installed. Skipping installation."
-fi  
+fi
 
+# --------------------------
+# Set Bash as Default Shell
+# --------------------------
 
 # Set Bash as the default shell
 if [ "$SHELL" != "$(which bash)" ]; then
@@ -39,7 +51,11 @@ else
     print_info_message "Bash is already the default shell. Skipping change."
 fi
 
-# install Starship prompt for Bash
+# --------------------------
+# Install Starship Prompt
+# --------------------------
+
+# Install Starship prompt for Bash
 if ! command -v starship &> /dev/null; then
     print_info_message "Installing Starship prompt for Bash"
     curl -fsSL https://starship.rs/install.sh | sh -s -- -y

@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Docker for Fedora KDE
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -22,12 +26,23 @@ fi
 
 print_tool_setup_start "Docker"
 
-# Uninstall old versions of Docker if they exist
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-  sudo apt-get remove -y --purge "$pkg" || true
+# --------------------------
+# Remove Old Docker Versions
+# --------------------------
+
+# Uninstall old versions of Docker and Podman packages if they exist
+print_info_message "Removing old Docker/Podman versions if present"
+for pkg in docker docker-client docker-client-latest docker-common docker-latest \
+           docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux \
+           docker-engine podman-docker; do
+  sudo dnf remove -y "$pkg" 2>/dev/null || true
 done
 
-# Check to see if the newer Docker packages are already installed
+# --------------------------
+# Check if Docker is Already Installed
+# --------------------------
+
+# Check to see if Docker is already installed and working
 if command -v docker >/dev/null 2>&1 && docker --version >/dev/null 2>&1; then
   print_info_message "Docker is already installed. Skipping installation."
   print_tool_setup_complete "Docker"
@@ -36,26 +51,39 @@ else
   print_info_message "Docker not found or not working. Proceeding with installation."
 fi
 
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+# --------------------------
+# Install Docker Repository
+# --------------------------
 
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+# Install required packages
+print_info_message "Installing required packages"
+sudo dnf install -y dnf-plugins-core
 
-# Install the latest version of Docker Engine, CLI, and Containerd
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# Add Docker's official repository for Fedora
+print_info_message "Adding Docker repository for Fedora"
+sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+#sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+# --------------------------
+# Install Docker Packages
+# --------------------------
+
+# Install the latest version of Docker Engine, CLI, Containerd, and plugins
+print_info_message "Installing Docker Engine, CLI, and plugins"
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# --------------------------
+# Configure and Start Docker Service
+# --------------------------
 
 # Start and enable Docker service
+print_info_message "Starting and enabling Docker service"
 sudo systemctl start docker
 sudo systemctl enable docker
+
+# --------------------------
+# Add User to Docker Group
+# --------------------------
 
 # Add original user (when run with sudo) or current user to the docker group
 if [ -n "${SUDO_USER-}" ]; then
@@ -63,12 +91,20 @@ if [ -n "${SUDO_USER-}" ]; then
 else
   TARGET_USER="$USER"
 fi
+
+print_info_message "Adding user '$TARGET_USER' to docker group"
 sudo usermod -aG docker "$TARGET_USER"
 
-# Do NOT run `newgrp` here — it spawns an interactive shell and blocks scripts.
-echo "Docker installation completed."
-docker --version
-echo "To apply the new group membership, please log out and log back in, or restart your terminal session."
+# --------------------------
+# Installation Complete
+# --------------------------
 
+echo ""
+print_info_message "Docker installation completed successfully!"
+docker --version
+echo ""
+print_warning_message "IMPORTANT: To apply the new group membership, please log out and log back in,"
+print_warning_message "or restart your terminal session. You may also need to restart your system."
+echo ""
 
 print_tool_setup_complete "Docker"
