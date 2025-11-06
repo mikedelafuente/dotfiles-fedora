@@ -162,7 +162,7 @@ fi
 # Add Flathub repository if not already added
 if ! flatpak remotes 2>/dev/null | grep -q flathub; then
     print_info_message "Adding Flathub repository"
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 fi
 
 # Update Flatpak apps if they have not been updated in the last day
