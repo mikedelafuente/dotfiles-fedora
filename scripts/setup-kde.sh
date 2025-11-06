@@ -49,14 +49,83 @@ fi
 if [ -n "$KWRITECONFIG" ]; then
     print_info_message "Configuring touchpad settings..."
     
-    # Disable touchpad tap-to-click to prevent accidental clicks
-    # This is set in the kcminputrc file under the Libinput section
-    $KWRITECONFIG --file kcminputrc --group "Libinput" --group "1739" --group "52710" --group "SYNA8004:00 06CB:CE16 Touchpad" --key "TapToClick" "false" 2>/dev/null || true
+    # Disable tap-to-click and set ClickMethod=2 for each detected touchpad.
+    # We need to extract vendor:product IDs from libinput to create proper nested groups
+    TOUCHPADS=()
     
-    # Alternative: Try to set for all touchpads generically
+    if command -v libinput &> /dev/null; then
+        # Parse libinput list-devices output to extract device name and IDs
+        while IFS= read -r line; do
+            if [[ "$line" =~ Device:[[:space:]]*(.*) ]]; then
+                device_name="${BASH_REMATCH[1]}"
+                device_name=$(echo "$device_name" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                
+                # Check if this is a touchpad
+                if echo "$device_name" | grep -qi touchpad; then
+                    # Extract hex vendor:product (e.g., "2808:0106" from "ASUF1205:00 2808:0106 Touchpad")
+                    # Match pattern: 4 hex digits, colon, 4 hex digits (with word boundaries)
+                    if [[ "$device_name" =~ [[:space:]]([0-9A-Fa-f]{4}):([0-9A-Fa-f]{4})[[:space:]] ]]; then
+                        vendor_hex="${BASH_REMATCH[1]}"
+                        product_hex="${BASH_REMATCH[2]}"
+                        vendor_dec=$((16#$vendor_hex))
+                        product_dec=$((16#$product_hex))
+                        TOUCHPADS+=("$vendor_dec:$product_dec:$device_name")
+                    else
+                        # No vendor:product found, store with placeholder
+                        TOUCHPADS+=(":0:$device_name")
+                    fi
+                fi
+            fi
+        done < <(sudo libinput list-devices 2>/dev/null)
+    elif command -v xinput &> /dev/null; then
+        # Fallback to xinput (won't have vendor:product IDs)
+        mapfile -t raw < <(xinput --list --name-only 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -i touchpad || true)
+        for d in "${raw[@]}"; do
+            TOUCHPADS+=(":0:$d")
+        done
+    fi
+
+    if [ ${#TOUCHPADS[@]} -gt 0 ]; then
+        for entry in "${TOUCHPADS[@]}"; do
+            IFS=':' read -r vendor_dec product_dec device_name <<< "$entry"
+            
+            if [ -n "$vendor_dec" ] && [ "$vendor_dec" != "0" ] && [ -n "$product_dec" ] && [ "$product_dec" != "0" ]; then
+                print_info_message "Applying touchpad settings to: $device_name (vendor=$vendor_dec, product=$product_dec)"
+                # Create nested group structure: [Libinput][vendor][product][device]
+                $KWRITECONFIG --file kcminputrc --group "Libinput" --group "$vendor_dec" --group "$product_dec" --group "$device_name" --key "TapToClick" "false" 2>/dev/null || true
+                $KWRITECONFIG --file kcminputrc --group "Libinput" --group "$vendor_dec" --group "$product_dec" --group "$device_name" --key "ClickMethod" "2" 2>/dev/null || true
+            else
+                print_info_message "Applying touchpad settings to: $device_name (no vendor/product ID)"
+                # Fallback: just use device name
+                $KWRITECONFIG --file kcminputrc --group "Libinput" --group "$device_name" --key "TapToClick" "false" 2>/dev/null || true
+                $KWRITECONFIG --file kcminputrc --group "Libinput" --group "$device_name" --key "ClickMethod" "2" 2>/dev/null || true
+            fi
+        done
+    else
+        print_info_message "No touchpads detected via libinput/xinput; applying generic settings"
+    fi
+
+    # Also set the generic Libinput defaults (covers devices not enumerated above)
     $KWRITECONFIG --file kcminputrc --group "Libinput" --key "TapToClick" "false" 2>/dev/null || true
-    
-    print_info_message "Touchpad tap-to-click disabled"
+    $KWRITECONFIG --file kcminputrc --group "Libinput" --key "ClickMethod" "2" 2>/dev/null || true
+
+     print_info_message "Touchpad tap-to-click disabled and click method set"
+
+    # Reload KDE input device configuration
+    if command -v kquitapp6 &> /dev/null; then
+        print_info_message "Reloading KDE input device settings..."
+        # Restart the KDE settings daemon to reload input configurations
+        kquitapp6 kded6 2>/dev/null || true
+        sleep 1
+        kded6 &> /dev/null &
+        print_info_message "Input settings reloaded using kquitapp6"
+    elif command -v qdbus6 &> /dev/null; then
+        print_info_message "Reloading KDE input device settings..."
+        qdbus6 org.kde.KWin /KWin reconfigure 2>/dev/null || true
+        print_info_message "Input settings reloaded using qdbus6"
+    else
+        print_warning_message "Could not reload settings automatically. Changes will take effect after logout/login"
+    fi
 fi
 
 # --------------------------
@@ -75,17 +144,20 @@ if [ -n "$KWRITECONFIG" ]; then
         CURRENT_PARAMS=$(sudo grubby --info=DEFAULT | grep args | sed 's/args="//' | sed 's/"$//')
         
         if ! echo "$CURRENT_PARAMS" | grep -q "mem_sleep_default=deep"; then
-            print_action_message "Would you like to enable deep sleep mode? This can improve battery life on laptops."
-            print_info_message "This will add 'mem_sleep_default=deep' to kernel parameters."
-            print_warning_message "Note: Some hardware may not support this. You can revert if you experience issues."
-            
-            # For automation purposes, we'll skip the interactive prompt
-            # Uncomment the following lines if you want to enable this automatically:
-            # sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
-            # print_info_message "Deep sleep mode enabled. Please reboot for changes to take effect."
-            
-            print_info_message "Skipping automatic deep sleep configuration. Run manually if needed:"
-            print_info_message "  sudo grubby --update-kernel=ALL --args=\"mem_sleep_default=deep\""
+            # Detect if the system has a battery (i.e., is a laptop)
+            if [ -d "/sys/class/power_supply/BAT0" ] || [ -d "/sys/class/power_supply/BAT1" ]; then
+                IS_LAPTOP=true
+            else
+                IS_LAPTOP=false
+            fi
+
+            if [ "$IS_LAPTOP" = true ]; then
+                print_info_message "Laptop detected. Enabling deep sleep configuration"
+                sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
+                print_info_message "Deep sleep mode enabled. Please reboot for changes to take effect."
+            else
+                print_info_message "No laptop battery detected; skipping deep sleep configuration"
+            fi
         else
             print_info_message "Deep sleep mode is already configured"
         fi
@@ -123,30 +195,6 @@ fi
 
 print_info_message "Checking for useful KDE utilities..."
 
-# Install KDE Connect for phone integration (Flatpak preferred)
-if ! flatpak list | grep -q "org.kde.kdeconnect"; then
-    print_info_message "Installing KDE Connect via Flatpak"
-    flatpak install -y flathub org.kde.kdeconnect.kde
-else
-    print_info_message "KDE Connect is already installed"
-fi
-
-# # Install Konsole if not present (dnf preferred for system integration)
-# if ! command -v konsole &> /dev/null; then
-#     print_info_message "Installing Konsole terminal emulator"
-#     sudo dnf install -y konsole
-# else
-#     print_info_message "Konsole is already installed"
-# fi
-
-# Install Spectacle (screenshot tool) if not present (dnf preferred for system integration)
-if ! command -v spectacle &> /dev/null; then
-    print_info_message "Installing Spectacle screenshot tool"
-    sudo dnf install -y spectacle
-else
-    print_info_message "Spectacle is already installed"
-fi
-
 # Install KDE Partition Manager if not present (dnf preferred for system tools)
 if ! command -v partitionmanager &> /dev/null; then
     print_info_message "Installing KDE Partition Manager"
@@ -162,14 +210,20 @@ fi
 print_info_message "Restarting KDE Plasma shell to apply changes..."
 print_warning_message "Your desktop may flicker briefly as the shell restarts"
 
-# Restart plasmashell to apply configuration changes
-if command -v kquitapp6 &> /dev/null; then
-    kquitapp6 plasmashell && kstart6 plasmashell &> /dev/null &
-elif command -v kquitapp5 &> /dev/null; then
-    kquitapp5 plasmashell && kstart5 plasmashell &> /dev/null &
-else
-    print_warning_message "Could not restart plasmashell automatically. Please log out and back in to see all changes."
+# Default to the Breeze Dark theme
+if [ -n "$KWRITECONFIG" ]; then
+    $KWRITECONFIG --file kwinrc --group "Theme" --key "name" "Breeze Dark"
+    print_info_message "Set KDE Plasma theme to Breeze Dark"
 fi
+
+# Restart plasmashell to apply configuration changes
+# if command -v kquitapp6 &> /dev/null; then
+#     kquitapp6 plasmashell && kstart6 plasmashell &> /dev/null &
+# elif command -v kquitapp5 &> /dev/null; then
+#     kquitapp5 plasmashell && kstart5 plasmashell &> /dev/null &
+# else
+#     print_warning_message "Could not restart plasmashell automatically. Please log out and back in to see all changes."
+# fi
 
 # --------------------------
 # Completion

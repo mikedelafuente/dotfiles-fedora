@@ -5,7 +5,7 @@
 # the files are located in the bash-doc package.
 
 # the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
+# for ssh logins, install and configure the libpam-umask package.T
 #umask 022
 
 # if running bash
