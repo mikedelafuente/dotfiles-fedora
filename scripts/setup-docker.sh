@@ -61,8 +61,7 @@ sudo dnf install -y dnf-plugins-core
 
 # Add Docker's official repository for Fedora
 print_info_message "Adding Docker repository for Fedora"
-sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-#sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
 # --------------------------
 # Install Docker Packages
@@ -70,7 +69,7 @@ sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/do
 
 # Install the latest version of Docker Engine, CLI, Containerd, and plugins
 print_info_message "Installing Docker Engine, CLI, and plugins"
-sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # --------------------------
 # Configure and Start Docker Service

@@ -3,12 +3,14 @@
 # --------------------------
 # Setup Postman for Fedora KDE
 # --------------------------
-# Postman is installed via Flatpak, which is the recommended method on Fedora.
-# Flatpak provides:
-# - Automatic updates through KDE Discover or 'flatpak update'
-# - Sandboxed security
-# - Consistent versions across distributions
-# - Easy maintenance through standard Flatpak tooling
+# Postman is installed from a direct download of their official tarball.
+# The Flatpak on Flathub is unverified and not officially supported by Postman Inc.
+#
+# This installation method:
+# - Uses the official Postman distribution
+# - Installs to /opt/Postman for system-wide access
+# - Creates a desktop entry for easy launching
+# - Provides the full-featured version without sandboxing limitations
 # --------------------------
 
 # --------------------------
@@ -34,28 +36,50 @@ fi
 print_tool_setup_start "Postman"
 
 # --------------------------
-# Install Postman via Flatpak
+# Install Postman via Official Tarball
 # --------------------------
 
 # Check if Postman is already installed
-if ! flatpak list 2>/dev/null | grep -q "com.getpostman.Postman"; then
-    print_info_message "Installing Postman via Flatpak"
-    
-    # Install Postman from Flathub
-    print_info_message "Installing Postman from Flathub"
-    flatpak install -y flathub com.getpostman.Postman
-    
-    print_info_message "Postman installed successfully"
-    print_info_message "You can launch Postman from your application menu or run:"
-    print_info_message "  flatpak run com.getpostman.Postman"
-    echo ""
-    print_info_message "To update Postman in the future, run:"
-    print_info_message "  flatpak update com.getpostman.Postman"
-    print_info_message "Or update all Flatpak apps with:"
-    print_info_message "  flatpak update"
-else
+if [ -d "/opt/Postman" ] || command -v postman &> /dev/null; then
     print_info_message "Postman is already installed. Skipping installation."
-    print_info_message "Installed version: $(flatpak info com.getpostman.Postman 2>/dev/null | grep Version | awk '{print $2}')"
+else
+    print_info_message "Installing Postman from official tarball"
+    
+    # Download the latest Postman tarball
+    print_info_message "Downloading Postman tarball"
+    POSTMAN_URL="https://dl.pstmn.io/download/latest/linux64"
+    TEMP_POSTMAN_TAR="/tmp/postman.tar.gz"
+    
+    if wget -O "$TEMP_POSTMAN_TAR" "$POSTMAN_URL"; then
+        print_info_message "Extracting Postman to /opt"
+        sudo tar -xzf "$TEMP_POSTMAN_TAR" -C /opt
+        
+        # Create a symbolic link for easy command-line access
+        print_info_message "Creating symbolic link"
+        sudo ln -sf /opt/Postman/Postman /usr/local/bin/postman
+        
+        # Create a desktop entry
+        print_info_message "Creating desktop entry"
+        sudo tee /usr/share/applications/postman.desktop > /dev/null <<EOF
+[Desktop Entry]
+Name=Postman
+Comment=API Development Environment
+Exec=/opt/Postman/Postman
+Icon=/opt/Postman/app/resources/app/assets/icon.png
+Terminal=false
+Type=Application
+Categories=Development;
+EOF
+        
+        # Clean up the downloaded file
+        rm -f "$TEMP_POSTMAN_TAR"
+        
+        print_info_message "Postman installed successfully"
+        print_info_message "You can launch Postman from your application menu or run: postman"
+    else
+        print_error_message "Failed to download Postman tarball"
+        print_info_message "You can manually download and install from: https://www.postman.com/downloads/"
+    fi
 fi
 
 print_tool_setup_complete "Postman"
