@@ -96,98 +96,24 @@ if [ -n "$KWRITECONFIG" ]; then
 fi
 
 # --------------------------
-# Configure Power Management
-# --------------------------
-
-if [ -n "$KWRITECONFIG" ]; then
-    print_info_message "Configuring power management settings..."
-    
-    # Disable automatic screen locking
-    $KWRITECONFIG --file kscreenlockerrc --group "Daemon" --key "Autolock" "false"
-    
-    print_info_message "Power management settings configured (auto-lock disabled)"
-fi
-
-# --------------------------
 # Configure Desktop Behavior
 # --------------------------
 
 if [ -n "$KWRITECONFIG" ]; then
     print_info_message "Configuring desktop behavior..."
     
-    # Enable desktop effects (compositing)
-    $KWRITECONFIG --file kwinrc --group "Compositing" --key "Enabled" "true"
-    
-    # Set Breeze Dark theme
-    $KWRITECONFIG --file kdeglobals --group "General" --key "ColorScheme" "BreezeDark"
-    
+
     # Configure 4 virtual desktops
     $KWRITECONFIG --file kwinrc --group "Desktops" --key "Number" "4"
-    $KWRITECONFIG --file kwinrc --group "Desktops" --key "Rows" "1"
+    $KWRITECONFIG --file kwinrc --group "Desktops" --key "Rows" "4"
     
-    print_info_message "Desktop behavior configured (compositing enabled, Breeze Dark theme, 4 virtual desktops)"
-fi
-
-# --------------------------
-# Configure Displays and Panel
-# --------------------------
-
-if [ -n "$KWRITECONFIG" ]; then
-    print_info_message "Configuring display and panel settings..."
+    # Enable separate virtual desktops per screen (primary display only gets virtual desktops)
+    # Note: In KDE Plasma 6, this is controlled by the "Separate screen focus" option
+    # Setting to false means virtual desktops span all screens
+    # Setting to true means each screen can have independent virtual desktops
+    $KWRITECONFIG --file kwinrc --group "Windows" --key "SeparateScreenFocus" "true"
     
-    # Find the largest monitor and set as primary
-    if command -v xrandr &> /dev/null; then
-        # Get connected monitors with their resolutions
-        LARGEST_MONITOR=$(xrandr --query | grep " connected" | awk '{
-            # Extract resolution (e.g., "1920x1080")
-            if ($3 ~ /^[0-9]+x[0-9]+/) {
-                res = $3
-            } else if ($4 ~ /^[0-9]+x[0-9]+/) {
-                res = $4
-            } else {
-                next
-            }
-            # Parse width and height
-            split(res, dims, "x")
-            width = dims[1]
-            split(dims[2], h, "+")
-            height = h[1]
-            area = width * height
-            if (area > max_area) {
-                max_area = area
-                monitor = $1
-            }
-        }
-        END { print monitor }')
-        
-        if [ -n "$LARGEST_MONITOR" ]; then
-            print_info_message "Setting $LARGEST_MONITOR as primary display"
-            xrandr --output "$LARGEST_MONITOR" --primary
-        else
-            print_warning_message "Could not detect largest monitor"
-        fi
-    fi
-    
-    # Configure panel to auto-hide
-    # Panel configuration is stored in plasma-org.kde.plasma.desktop-appletsrc
-    # We'll use a Python/DBus script or kwriteconfig with the panel's config group
-    PANEL_CONFIG="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
-    
-    if [ -f "$PANEL_CONFIG" ]; then
-        # Find the panel container ID (usually [Containments][1] or [Containments][2])
-        PANEL_ID=$(grep -E "^\[Containments\]\[[0-9]+\]" "$PANEL_CONFIG" | grep -A5 "panel" | head -n1 | sed 's/\[Containments\]\[\([0-9]*\)\]/\1/')
-        
-        if [ -n "$PANEL_ID" ]; then
-            print_info_message "Configuring panel $PANEL_ID to auto-hide"
-            $KWRITECONFIG --file plasma-org.kde.plasma.desktop-appletsrc --group "Containments" --group "$PANEL_ID" --group "General" --key "hiding" "1"
-        else
-            print_warning_message "Could not find panel ID. Panel auto-hide must be configured manually."
-        fi
-    else
-        print_warning_message "Panel configuration file not found. Panel settings will be applied on next login."
-    fi
-    
-    print_info_message "Display and panel settings configured"
+    print_info_message "Desktop behavior configured (compositing enabled, Breeze Dark theme, 4 virtual desktops on primary display)"
 fi
 
 # --------------------------
