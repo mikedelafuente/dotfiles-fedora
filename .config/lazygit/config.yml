@@ -1,0 +1,26 @@
+# Configuration for LazyGit
+
+# The following settings are for customizing LazyGit's behavior and appearance.
+
+# General settings
+gui:
+  theme: "dark"  # Choose between "dark" or "light" theme
+  fontSize: 12   # Font size for the UI
+
+# Keybindings
+keybindings:
+  quit: "q"      # Key to quit LazyGit
+  refresh: "r"   # Key to refresh the view
+  commit: "c"    # Key to open the commit dialog
+
+# Git settings
+git:
+  useEditor: true  # Use the default editor for commit messages
+  autoFetch: true  # Automatically fetch changes from the remote
+
+# Display settings
+display:
+  showBranch: true  # Show the current branch in the UI
+  showStatus: true  # Show the status of files in the UI
+
+# Additional settings can be added as needed.

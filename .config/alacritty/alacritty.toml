@@ -1,0 +1,22 @@
+# $HOME/.config/alacritty/alacritty.toml
+[general]
+live_config_reload = true
+
+[font]
+size = 14.0
+
+[font.bold]
+family = "Hack Nerd Font Mono"
+style = "Heavy"
+
+[font.bold_italic]
+family = "Hack Nerd Font Mono"
+style = "Heavy Italic"
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+style = "Medium Italic"
+
+[font.normal]
+family = "Hack Nerd Font Mono"
+style = "Medium"
