@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
+# --------------------------
+# Common Header for Fedora KDE Setup Scripts
+# --------------------------
+# This file sets up common variables and sources the function library
+# It should be sourced at the beginning of each setup script
+
 set -euo pipefail
 
 # Set a USER_HOME_DIR variable and export it for use in other scripts
 export USER_HOME_DIR="$(eval echo ~${SUDO_USER:-$(whoami)})"
 
-# use parameter expansion to avoid "unbound variable" with set -u
+# Use parameter expansion to avoid "unbound variable" with set -u
 if [ -z "${DF_SCRIPT_DIR:-}" ]; then
     DF_SCRIPT_DIR="$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 fi

@@ -1,6 +1,14 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Discord for Fedora KDE
+# --------------------------
+# Discord is installed via Flatpak from Flathub.
+# The Discord Flatpak is published by Discord Inc. and is the recommended
+# installation method for Linux distributions.
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -20,29 +28,28 @@ fi
 # End Import Common Header 
 # --------------------------
 
+print_tool_setup_start "Discord"
+
 # --------------------------
-# Setup Discord
+# Install Discord via Flatpak
 # --------------------------
 
-print_line_break "Installing Discord"
-
-# Determine if Discord is already installed
-if command -v discord &> /dev/null; then
+# Check if Discord is already installed
+if flatpak list 2>/dev/null | grep -q "com.discordapp.Discord"; then
     print_info_message "Discord is already installed. Skipping installation."
-    print_line_break "Discord installation completed."
-    exit 0
+else
+    print_info_message "Installing Discord via Flatpak"
+    
+    # Install Discord from Flathub
+    print_info_message "Installing Discord from Flathub"
+    flatpak install -y flathub com.discordapp.Discord
+    
+    print_info_message "Discord installed successfully"
+    print_info_message "You can launch Discord from your application menu or run:"
+    print_info_message "  flatpak run com.discordapp.Discord"
+    echo ""
+    print_info_message "Note: Some features (Game Activity, Rich Presence) may be limited"
+    print_info_message "due to sandboxing. Check the Flatpak README for workarounds if needed."
 fi
 
-# Download the latest Discord .deb package
-DISCORD_DEB_URL="https://discord.com/api/download?platform=linux&format=deb"
-TEMP_DEB_FILE="/tmp/discord.deb"
-
-wget -O "$TEMP_DEB_FILE" "$DISCORD_DEB_URL"
-
-# Install the downloaded package
-sudo apt install -y "$TEMP_DEB_FILE"
-
-# Clean up
-rm -f "$TEMP_DEB_FILE"
-
-print_line_break "Discord installation completed."
+print_tool_setup_complete "Discord"

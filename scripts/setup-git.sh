@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # --------------------------
+# Setup Git and SSH Keys for Fedora KDE
+# --------------------------
+
+# --------------------------
 # Import Common Header 
 # --------------------------
 
@@ -21,12 +25,14 @@ fi
 # --------------------------
 
 # --------------------------
-# See if username and email were passed as arguments
+# Get Username and Email Arguments
 # --------------------------
+
+# See if username and email were passed as arguments
 USERNAME_ARG="$1"
 EMAIL_ARG="$2"
 
-# if not passed as arguments, then ask for them
+# If not passed as arguments, then ask for them
 if [ -z "$USERNAME_ARG" ]; then
     read -rp "Enter your full name for git commit history: " USERNAME_ARG
 fi
@@ -44,33 +50,69 @@ fi
 # End check for username and email arguments
 # --------------------------
 
+print_tool_setup_start "Git"
+
 # --------------------------
-# Set up Git configuration
+# Ensure Git is Installed
 # --------------------------
 
-print_tool_setup_start "Git"
+# Install Git if not already installed (usually pre-installed on Fedora)
+if ! command -v git &> /dev/null; then
+    print_info_message "Git not found. Installing Git via DNF"
+    sudo dnf install -y git
+else
+    print_info_message "Git is already installed (version: $(git --version))"
+fi
+
+# --------------------------
+# Configure Git Settings
+# --------------------------
+
+print_info_message "Configuring Git with user information"
 
 git config --global user.name "$USERNAME_ARG"
 git config --global user.email "$EMAIL_ARG"
 git config --global core.editor "nvim"
 git config --global init.defaultBranch main
 
-# Check to see if SSH keys already exist
+print_info_message "Git configured successfully:"
+print_info_message "  Name: $USERNAME_ARG"
+print_info_message "  Email: $EMAIL_ARG"
+print_info_message "  Editor: nvim"
+print_info_message "  Default Branch: main"
 
+# --------------------------
+# Setup SSH Keys
+# --------------------------
+
+print_info_message "Setting up SSH keys for Git"
+
+# Check to see if SSH keys already exist
 if [ -f "$USER_HOME_DIR/.ssh/id_ed25519" ]; then
-    echo "SSH key already exists. Skipping key generation."
+    print_info_message "SSH key already exists. Skipping key generation."
 else
-    echo "Generating new SSH key."
+    print_info_message "Generating new SSH key using Ed25519 algorithm"
+    
+    # Ensure .ssh directory exists
+    mkdir -p "$USER_HOME_DIR/.ssh"
+    chmod 700 "$USER_HOME_DIR/.ssh"
 
     # Create SSH keys for GitHub using Ed25519 without passphrase
     ssh-keygen -t ed25519 -C "$EMAIL_ARG" -f "$USER_HOME_DIR/.ssh/id_ed25519" -N ""
+    
     # Add SSH key to ssh-agent
     eval "$(ssh-agent -s)"
     ssh-add "$USER_HOME_DIR/.ssh/id_ed25519"
+    
     # Display the public key for GitHub
-    echo "Your public SSH key is:"
+    echo ""
+    print_info_message "Your public SSH key is:"
+    echo ""
     cat "$USER_HOME_DIR/.ssh/id_ed25519.pub"
-    echo "Copy this key to your GitHub account."
+    echo ""
+    print_warning_message "Copy this key to your GitHub account:"
+    print_info_message "  https://github.com/settings/keys"
+    echo ""
 fi
 
 print_tool_setup_complete "Git"

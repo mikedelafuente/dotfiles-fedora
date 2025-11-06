@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# fn-lib.sh - A library of reusable bash functions for Pop!_OS setup scripts
+# --------------------------
+# fn-lib.sh - A library of reusable bash functions for Fedora KDE setup scripts
+# --------------------------
 
 print_tool_setup_start() {
   local tool_name="$1"
