@@ -22,6 +22,10 @@ fi
 if [ -r "$USER_HOME_DIR/.dotfiles_bootstrap_config" ]; then
   # shellcheck source=/dev/null
   source "$USER_HOME_DIR/.dotfiles_bootstrap_config"
+else
+  print_info_message "Configuration file not found. Setting based on System User."
+  FULL_NAME=""$(getent passwd "$(whoami)" | cut -d ':' -f 5 | cut -d ',' -f 1)""
+  DOTNET_CORE_SDK_VERSION="9.0"
 fi
 
 # Prompt for full name
@@ -59,6 +63,7 @@ echo "Please confirm the following information:"
 echo "Full Name: $FULL_NAME"
 echo "Email Address: $EMAIL_ADDRESS"
 echo ".NET Core SDK Version: $DOTNET_CORE_SDK_VERSION"
+
 read -rp "Is this information correct? (y/n): " CONFIRMATION
 if [[ ! "$CONFIRMATION" =~ ^[Yy]$ ]]; then
   echo "Aborting. Please run the script again to enter the correct information."

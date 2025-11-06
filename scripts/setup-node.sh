@@ -72,9 +72,12 @@ export NVM_DIR="$USER_HOME_DIR/.nvm"
 if command -v nvm &> /dev/null; then
     print_info_message "Installing Node.js LTS version via NVM"
     nvm install --lts
-    nvm use --lts
+    # nvm use --lts
     nvm alias default 'lts/*'
     
+    print_action_message "Run the following command to set Node.js LTS as default:"
+    print_action_message "  nvm use --lts"
+
     print_info_message "Node.js version: $(node --version)"
     print_info_message "npm version: $(npm --version)"
     print_info_message "NVM version: $(nvm --version)"

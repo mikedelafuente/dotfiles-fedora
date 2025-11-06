@@ -32,11 +32,16 @@ print_tool_setup_start "Docker"
 
 # Uninstall old versions of Docker and Podman packages if they exist
 print_info_message "Removing old Docker/Podman versions if present"
-for pkg in docker docker-client docker-client-latest docker-common docker-latest \
-           docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux \
-           docker-engine podman-docker; do
-  sudo dnf remove -y "$pkg" 2>/dev/null || true
-done
+sudo dnf remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine
 
 # --------------------------
 # Check if Docker is Already Installed
@@ -61,7 +66,7 @@ sudo dnf install -y dnf-plugins-core
 
 # Add Docker's official repository for Fedora
 print_info_message "Adding Docker repository for Fedora"
-sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
 # --------------------------
 # Install Docker Packages
@@ -70,7 +75,6 @@ sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/dock
 # Install the latest version of Docker Engine, CLI, Containerd, and plugins
 print_info_message "Installing Docker Engine, CLI, and plugins"
 sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
 # --------------------------
 # Configure and Start Docker Service
 # --------------------------
@@ -78,7 +82,7 @@ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 # Start and enable Docker service
 print_info_message "Starting and enabling Docker service"
 sudo systemctl start docker
-sudo systemctl enable docker
+sudo systemctl enable --now docker
 
 # --------------------------
 # Add User to Docker Group
