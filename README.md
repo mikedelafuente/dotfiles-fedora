@@ -1,4 +1,3 @@
-````markdown
 # Dotfiles for Fedora KDE
 
 This repository contains my personal dotfiles and configuration for Fedora KDE Plasma. The goal of this project is to provide a streamlined setup and configuration for my development environment on Fedora.
@@ -106,4 +105,3 @@ Used for:
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
-````
