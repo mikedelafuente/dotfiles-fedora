@@ -115,4 +115,16 @@ else
     echo ""
 fi
 
+# --------------------------
+# Install lazygit
+# --------------------------
+print_info_message "Checking for lazygit installation"
+if ! command -v lazygit &> /dev/null; then
+    print_info_message "lazygit not found. Installing lazygit via dnf"
+    sudo dnf copr enable atim/lazygit -y
+    sudo dnf install -y lazygit
+else
+    print_info_message "lazygit is already installed (version: $(lazygit --version))"
+fi
+
 print_tool_setup_complete "Git"
