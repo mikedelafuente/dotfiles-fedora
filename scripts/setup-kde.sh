@@ -178,12 +178,21 @@ fi
 
 print_info_message "Configuring function key behavior for Keychron keyboards..."
 
-# Change to mode 2 (fn key acts as last key - F keys are default)
-echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
+# Check if the hid_apple module parameter exists
+if [ -f /sys/module/hid_apple/parameters/fnmode ]; then
+    print_info_message "Found hid_apple module, configuring fnmode..."
+    
+    # Change to mode 2 (fn key acts as last key - F keys are default)
+    echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
 
-# Make it permanent
-echo "options hid_apple fnmode=2" | sudo tee /etc/modprobe.d/hid_apple.conf
-
+    # Make it permanent
+    echo "options hid_apple fnmode=2" | sudo tee /etc/modprobe.d/hid_apple.conf
+    
+    print_info_message "Function key behavior configured for Keychron keyboards"
+else
+    print_warning_message "hid_apple module not found - skipping function key configuration"
+    print_info_message "This is normal if you don't have Apple/Keychron keyboards connected"
+fi
 
 # --------------------------
 # Apply Configuration Changes
