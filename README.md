@@ -66,7 +66,7 @@ The bootstrap script installs a comprehensive development environment with the f
 - **lazydocker** - Terminal UI for Docker management
 
 #### Version Control UI
-- **lazygit** - Terminal UI for Git
+- **lazygit** - Terminal UI for Git - Make sure to watch [LazyGit](https://www.youtube.com/watch?v=CPLdltN7wgE)
 
 ### Shell & Terminal
 - **Bash** - Default shell

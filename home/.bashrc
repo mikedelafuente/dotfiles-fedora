@@ -41,6 +41,7 @@ alias gs='git status'
 alias gp='git pull'
 alias gc='git commit'
 alias gco='git checkout'
+alias lg='lazygit'
 
 
 # Enable color support for ls and grep
