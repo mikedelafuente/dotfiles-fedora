@@ -228,6 +228,9 @@ bash "$DF_SCRIPT_DIR/setup-neovim.sh"
 # Setup Mullvad VPN
 bash "$DF_SCRIPT_DIR/setup-mullvad.sh"
 
+# Setup NVIDIA drivers
+bash "$DF_SCRIPT_DIR/setup-nvidia.sh"
+
 # Run the setup-docker.sh script to set up Docker
 bash "$DF_SCRIPT_DIR/setup-docker.sh"
 
