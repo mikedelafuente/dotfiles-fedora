@@ -27,6 +27,151 @@ This script will:
 
 **Note:** The bootstrap script will prompt for some configuration values (name, email, .NET SDK version) on first run.
 
+## What Gets Installed
+
+The bootstrap script installs a comprehensive development environment with the following tools:
+
+### Essential CLI Tools
+- **git** - Version control system
+- **curl** - Command line tool for transferring data
+- **wget** - Network downloader
+- **xsel** - Command-line clipboard manipulation
+- **fzf** - Fuzzy finder for files and commands
+- **zoxide** - Smart directory navigation (`z` command)
+- **ripgrep** (`rg`) - Fast text search tool
+- **fd** - Fast alternative to `find`
+
+### Development Tools & Languages
+
+#### Rust Ecosystem
+- **rustup** - Rust toolchain installer and version manager
+- **cargo** - Rust package manager and build tool
+- **rustc** - Rust compiler
+
+#### Node.js Ecosystem
+- **nvm** - Node Version Manager
+- **node** - JavaScript runtime
+- **npm** - Node package manager
+
+#### .NET Ecosystem
+- **.NET SDK** - Microsoft's development framework
+- **JetBrains Rider** - .NET IDE
+
+#### Text Editors & IDEs
+- **Neovim** with **LazyVim** - Modern Vim-based editor
+- **VS Code** - Microsoft's code editor
+
+#### Containerization
+- **Docker** - Container platform
+- **lazydocker** - Terminal UI for Docker management
+
+#### Version Control UI
+- **lazygit** - Terminal UI for Git
+
+### Shell & Terminal
+- **Bash** - Default shell
+- **Starship** - Cross-shell prompt
+- **Alacritty** - GPU-accelerated terminal emulator
+
+### Applications (Flatpak/System)
+- **Discord** - Communication platform
+- **Spotify** - Music streaming
+- **Obsidian** - Note-taking and knowledge management
+- **Steam** - Gaming platform
+- **Postman** - API development tool
+- **Godot 4 Mono** - Game engine
+- **Zoom** - Video conferencing
+- **Mullvad VPN** - Privacy-focused VPN client
+
+### System & Utilities
+- **NVIDIA drivers** - Graphics drivers (if NVIDIA GPU detected)
+- **Nerd Fonts** - Programming fonts with icons
+- **Flatpak** - Universal package system
+
+## CLI Quick Reference
+
+Here are some essential commands for the tools installed:
+
+### Navigation & Search
+```bash
+# Smart directory jumping
+z <partial-directory-name>    # Jump to frequently used directory
+zi                           # Interactive directory selection
+
+# Fast file search
+fd <filename>                # Find files by name
+fd -t f "\.js$"             # Find all .js files
+rg "search term"            # Search text in files
+rg -i "case insensitive"    # Case-insensitive search
+
+# Fuzzy finding
+fzf                         # Interactive file finder
+history | fzf               # Search command history
+```
+
+### Development Tools
+```bash
+# Git with LazyGit
+lazygit                     # Terminal UI for Git operations
+git status                  # Check repository status
+git add .                   # Stage all changes
+git commit -m "message"     # Commit changes
+
+# Docker with LazyDocker
+lazydocker                  # Terminal UI for Docker
+docker ps                   # List running containers
+docker images               # List Docker images
+docker compose up -d        # Start services in background
+
+# Rust development
+cargo new myproject         # Create new Rust project
+cargo build                 # Build project
+cargo run                   # Run project
+cargo test                  # Run tests
+rustup update               # Update Rust toolchain
+
+# Node.js development
+nvm list                    # List installed Node versions
+nvm use --lts              # Use latest LTS version
+nvm install node           # Install latest Node.js
+npm init                   # Initialize new project
+npm install <package>      # Install package
+```
+
+### Text Editing
+```bash
+# Neovim with LazyVim
+nvim <file>                # Edit file with Neovim
+nvim .                     # Open current directory
+# Inside Neovim:
+# <leader>ff - Find files
+# <leader>fg - Live grep
+# <leader>e  - File explorer
+
+# VS Code
+code <file>                # Edit file with VS Code
+code .                     # Open current directory
+```
+
+### System Management
+```bash
+# Package management
+sudo dnf update            # Update system packages
+sudo dnf install <pkg>     # Install system package
+flatpak update            # Update Flatpak apps
+flatpak install <app>     # Install Flatpak app
+
+# Process monitoring (if installed)
+htop                      # Interactive process viewer
+```
+
+### Clipboard & Utilities  
+```bash
+# Clipboard operations
+echo "text" | xsel -b     # Copy to clipboard
+xsel -b                   # Paste from clipboard
+```
+
 ## Configuration Files
 
 The following configuration files are included in this repository:
