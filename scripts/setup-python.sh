@@ -20,7 +20,7 @@ fi
 # End Import Common Header 
 # --------------------------
 
-print_tool_setup_start "Zoom"
+print_tool_setup_start "Python"
 
 # --------------------------
 # Install Python

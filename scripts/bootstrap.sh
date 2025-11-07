@@ -229,6 +229,9 @@ bash "$DF_SCRIPT_DIR/setup-bash.sh"
 # Before setting up Alacritty, ensure Rust is installed
 bash "$DF_SCRIPT_DIR/setup-rust.sh"
 
+# Setup Go (Golang)
+bash "$DF_SCRIPT_DIR/setup-golang.sh"
+
 # Before setting up Alacritty, ensure that VS Code is installed
 bash "$DF_SCRIPT_DIR/setup-vscode.sh"
 
