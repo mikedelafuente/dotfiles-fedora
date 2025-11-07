@@ -64,20 +64,24 @@ if [ ! -f "$USER_HOME_DIR/.config/nvim/lua/config/lazy.lua" ]; then
   print_info_message "Backing up existing Neovim configuration if it exists."
   if [ -d "$USER_HOME_DIR/.config/nvim" ]; then
     print_action_message "Backing up existing Neovim configuration to ~/.config/nvim.bak"
+    rm -rf "$USER_HOME_DIR/.config/nvim.bak"
     mv "$USER_HOME_DIR/.config/nvim"{,.bak}
   fi
 
   # Optional but recommended - backup data directories
   if [ -d "$USER_HOME_DIR/.local/share/nvim" ]; then
     print_action_message "Backing up ~/.local/share/nvim to ~/.local/share/nvim.bak"
+    rm -rf "$USER_HOME_DIR/.local/share/nvim.bak"
     mv "$USER_HOME_DIR/.local/share/nvim"{,.bak}
   fi
   if [ -d "$USER_HOME_DIR/.local/state/nvim" ]; then
     print_action_message "Backing up ~/.local/state/nvim to ~/.local/state/nvim.bak"
+    rm -rf "$USER_HOME_DIR/.local/state/nvim.bak"
     mv "$USER_HOME_DIR/.local/state/nvim"{,.bak}
   fi
   if [ -d "$USER_HOME_DIR/.cache/nvim" ]; then
     print_action_message "Backing up ~/.cache/nvim to ~/.cache/nvim.bak"
+    rm -rf "$USER_HOME_DIR/.cache/nvim.bak"
     mv "$USER_HOME_DIR/.cache/nvim"{,.bak}
   fi
 
@@ -107,6 +111,32 @@ else
   print_info_message "ripgrep is already installed. Skipping installation."
 fi
 
+# --------------------------
+# Install LuaRocks (Lua package manager)
+# --------------------------
+print_info_message "Installing LuaRocks and Lua development packages"
+
+if ! command -v luarocks &> /dev/null; then
+  print_info_message "LuaRocks is not installed. Proceeding with installation."
+  sudo dnf install -y luarocks
+else
+  print_info_message "LuaRocks is already installed. Skipping installation."
+fi
+
+if ! command -v lua-devel &> /dev/null; then
+  print_info_message "lua-devel is not installed. Proceeding with installation."
+  sudo dnf install -y lua-devel
+else
+  print_info_message "lua-devel is already installed. Skipping installation."
+fi
+
+# for python support in Neovim install pynvim
+if ! pip3 show pynvim &> /dev/null; then
+  print_info_message "Installing pynvim for Python support in Neovim"
+  pip3 install --user pynvim
+else
+  print_info_message "pynvim is already installed. Skipping installation."
+fi
 
 # --------------------------
 # Create Neovim Configuration Directories

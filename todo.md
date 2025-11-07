@@ -8,7 +8,7 @@ This is a list of items I would like to get worked into my dotfiles
 - [x] Lazyvim
 - [x] Docker
 - [x] LazyDocker
-- [ ] LazyGit
+- [x] LazyGit
 - [ ] window tiling or determine how to switch spaces quickly
 - [x] VS Code
 - [x] Ensure .NET core works

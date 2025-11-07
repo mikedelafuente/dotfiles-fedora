@@ -44,6 +44,8 @@ alias gco='git checkout'
 alias lg='lazygit'
 
 
+
+
 # Enable color support for ls and grep
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagacad
@@ -67,3 +69,9 @@ fi
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Initialize zoxide if installed
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init bash)"
+fi

@@ -217,6 +217,9 @@ fi
 # Set up Git configuration
 bash "$DF_SCRIPT_DIR/setup-git.sh" "$FULL_NAME" "$EMAIL_ADDRESS"
 
+# Setup Python
+bash "$DF_SCRIPT_DIR/setup-python.sh"
+
 # Setup Fonts
 bash "$DF_SCRIPT_DIR/setup-fonts.sh"
 
@@ -232,7 +235,7 @@ bash "$DF_SCRIPT_DIR/setup-vscode.sh"
 # Setup a terminal emulator - Alacritty in this case
 bash "$DF_SCRIPT_DIR/setup-alacritty.sh"
 
-# Setup Neovim and Lazyvim
+# Setup Neovim and Lazyvim - This needs to run after python setup
 bash "$DF_SCRIPT_DIR/setup-neovim.sh"
 
 # Setup Mullvad VPN
