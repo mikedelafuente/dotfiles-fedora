@@ -56,45 +56,57 @@ NVIM_VERSION=$(nvim --version | head -n 1 | awk '{print $2}')
 NVIM_MAJOR_VERSION=$(echo "$NVIM_VERSION" | cut -d'.' -f1 | tr -d 'v')
 NVIM_MINOR_VERSION=$(echo "$NVIM_VERSION" | cut -d'.' -f2)
 
-if [ "$NVIM_MAJOR_VERSION" -lt 0 ] || { [ "$NVIM_MAJOR_VERSION" -eq 0 ] && [ "$NVIM_MINOR_VERSION" -lt 8 ]; }; then
-  print_error_message "Neovim version is less than 0.8. Please upgrade Neovim to version 0.8 or higher to use Lazy.nvim."
-  exit 0
-else
-  if [ ! -f "$USER_HOME_DIR/.config/nvim/lua/config/lazy.lua" ]; then
-    print_info_message "Installing Lazy.nvim"
-    
-    # Backup existing Neovim configuration if it exists
-    print_info_message "Backing up existing Neovim configuration if it exists."
-    if [ -d "$USER_HOME_DIR/.config/nvim" ]; then
-      print_action_message "Backing up existing Neovim configuration to ~/.config/nvim.bak"
-      mv "$USER_HOME_DIR/.config/nvim"{,.bak}
-    fi
 
-    # Optional but recommended - backup data directories
-    if [ -d "$USER_HOME_DIR/.local/share/nvim" ]; then
-      print_action_message "Backing up ~/.local/share/nvim to ~/.local/share/nvim.bak"
-      mv "$USER_HOME_DIR/.local/share/nvim"{,.bak}
-    fi
-    if [ -d "$USER_HOME_DIR/.local/state/nvim" ]; then
-      print_action_message "Backing up ~/.local/state/nvim to ~/.local/state/nvim.bak"
-      mv "$USER_HOME_DIR/.local/state/nvim"{,.bak}
-    fi
-    if [ -d "$USER_HOME_DIR/.cache/nvim" ]; then
-      print_action_message "Backing up ~/.cache/nvim to ~/.cache/nvim.bak"
-      mv "$USER_HOME_DIR/.cache/nvim"{,.bak}
-    fi
-
-    # Clone LazyVim starter configuration
-    print_info_message "Cloning LazyVim starter configuration"
-    git clone https://github.com/LazyVim/starter "$USER_HOME_DIR/.config/nvim"
-    rm -rf "$USER_HOME_DIR/.config/nvim/.git"
-
-    print_action_message "LazyVim installed successfully!"
-    print_action_message "Start nvim and then run ':LazyHealth' to check if everything is set up correctly."
-  else
-    print_info_message "Lazy.nvim is already installed. Skipping installation."
+if [ ! -f "$USER_HOME_DIR/.config/nvim/lua/config/lazy.lua" ]; then
+  print_info_message "Installing Lazy.nvim"
+  
+  # Backup existing Neovim configuration if it exists
+  print_info_message "Backing up existing Neovim configuration if it exists."
+  if [ -d "$USER_HOME_DIR/.config/nvim" ]; then
+    print_action_message "Backing up existing Neovim configuration to ~/.config/nvim.bak"
+    mv "$USER_HOME_DIR/.config/nvim"{,.bak}
   fi
+
+  # Optional but recommended - backup data directories
+  if [ -d "$USER_HOME_DIR/.local/share/nvim" ]; then
+    print_action_message "Backing up ~/.local/share/nvim to ~/.local/share/nvim.bak"
+    mv "$USER_HOME_DIR/.local/share/nvim"{,.bak}
+  fi
+  if [ -d "$USER_HOME_DIR/.local/state/nvim" ]; then
+    print_action_message "Backing up ~/.local/state/nvim to ~/.local/state/nvim.bak"
+    mv "$USER_HOME_DIR/.local/state/nvim"{,.bak}
+  fi
+  if [ -d "$USER_HOME_DIR/.cache/nvim" ]; then
+    print_action_message "Backing up ~/.cache/nvim to ~/.cache/nvim.bak"
+    mv "$USER_HOME_DIR/.cache/nvim"{,.bak}
+  fi
+
+  # Clone LazyVim starter configuration
+  print_info_message "Cloning LazyVim starter configuration"
+  git clone https://github.com/LazyVim/starter "$USER_HOME_DIR/.config/nvim"
+  rm -rf "$USER_HOME_DIR/.config/nvim/.git"
+
+  print_action_message "LazyVim installed successfully!"
+  print_action_message "Start nvim and then run ':LazyHealth' to check if everything is set up correctly."
+else
+  print_info_message "Lazy.nvim is already installed. Skipping installation."
 fi
+
+# Install fd and ripgrep if not already installed (required by some Neovim plugins)
+if ! command -v fd &> /dev/null; then
+  print_info_message "Installing fd (fd-find)"
+  sudo dnf install -y fd-find
+else
+  print_info_message "fd is already installed. Skipping installation."
+fi  
+
+if ! command -v rg &> /dev/null; then
+  print_info_message "Installing ripgrep"
+  sudo dnf install -y ripgrep
+else
+  print_info_message "ripgrep is already installed. Skipping installation."
+fi
+
 
 # --------------------------
 # Create Neovim Configuration Directories

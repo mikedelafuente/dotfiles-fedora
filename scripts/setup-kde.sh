@@ -131,6 +131,61 @@ else
 fi
 
 # --------------------------
+# Shortcuts for KDE Applications
+# --------------------------
+
+if [ -n "$KWRITECONFIG" ]; then
+    print_info_message "Configuring shortcuts for KDE applications..."
+
+    # Configure shortcuts in kglobalshortcutsrc
+    # kwriteconfig doesn't support the [group][subgroup] syntax, so we need to edit manually
+    SHORTCUTS_FILE="$HOME/.config/kglobalshortcutsrc"
+    
+    # Backup existing shortcuts file if it exists
+    if [ -f "$SHORTCUTS_FILE" ]; then
+        cp "$SHORTCUTS_FILE" "$SHORTCUTS_FILE.backup"
+    fi
+    
+    # Use crudini or direct editing to set shortcuts
+    if command -v crudini &> /dev/null; then
+        # crudini can handle nested sections
+        crudini --set "$SHORTCUTS_FILE" "services][Alacritty.desktop" "_launch" "Ctrl+Alt+T\\tMeta+Return\\tMeta+T"
+        crudini --set "$SHORTCUTS_FILE" "services][org.kde.konsole.desktop" "_launch" "none"
+    else
+        # Fallback: use sed to edit the file directly
+        # Create the sections if they don't exist
+        if ! grep -q "^\[services\]\[Alacritty.desktop\]" "$SHORTCUTS_FILE" 2>/dev/null; then
+            echo -e "\n[services][Alacritty.desktop]" >> "$SHORTCUTS_FILE"
+            echo "_launch=Ctrl+Alt+T\\tMeta+Return" >> "$SHORTCUTS_FILE"
+        else
+            sed -i '/^\[services\]\[Alacritty.desktop\]/,/^\[/ s|^_launch=.*|_launch=Ctrl+Alt+T\\tMeta+Return|' "$SHORTCUTS_FILE"
+        fi
+        
+        if ! grep -q "^\[services\]\[org.kde.konsole.desktop\]" "$SHORTCUTS_FILE" 2>/dev/null; then
+            echo -e "\n[services][org.kde.konsole.desktop]" >> "$SHORTCUTS_FILE"
+            echo "_launch=none" >> "$SHORTCUTS_FILE"
+        else
+            sed -i '/^\[services\]\[org.kde.konsole.desktop\]/,/^\[/ s|^_launch=.*|_launch=none|' "$SHORTCUTS_FILE"
+        fi
+    fi
+    
+    print_info_message "Keyboard shortcuts configured (Alacritty: Meta+T, Konsole shortcut disabled)"
+fi
+
+# --------------------------
+# Configure Function Key Behavior for Keychron Keyboards
+# --------------------------
+
+print_info_message "Configuring function key behavior for Keychron keyboards..."
+
+# Change to mode 2 (fn key acts as last key - F keys are default)
+echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
+
+# Make it permanent
+echo "options hid_apple fnmode=2" | sudo tee /etc/modprobe.d/hid_apple.conf
+
+
+# --------------------------
 # Apply Configuration Changes
 # --------------------------
 
