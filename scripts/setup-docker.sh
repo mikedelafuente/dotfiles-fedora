@@ -99,6 +99,21 @@ print_info_message "Adding user '$TARGET_USER' to docker group"
 sudo usermod -aG docker "$TARGET_USER"
 
 # --------------------------
+# Install Lazy Docker
+# --------------------------
+ESSENTIAL_PACKAGES=(git curl wget xsel fzf zoxide ripgrep fd)
+print_line_break "Installing essential packages"
+
+if ! dnf list installed lazydocker &> /dev/null; then
+    print_info_message "Installing lazydocker"
+    sudo dnf copr enable atim/lazydocker -y
+    sudo dnf install -y lazydocker
+else
+    print_info_message "lazydocker is already installed. Skipping installation."
+fi
+
+
+# --------------------------
 # Installation Complete
 # --------------------------
 

@@ -2,25 +2,25 @@
 This is a list of items I would like to get worked into my dotfiles
 
 
-- [ ] git update
-- [ ] Create SSH Keys for GitHub
-- [ ] Neovim
-- [ ] Lazyvim
-- [ ] Docker
-- [ ] LazyDocker
+- [x] git update
+- [x] Create SSH Keys for GitHub
+- [x] Neovim
+- [x] Lazyvim
+- [x] Docker
+- [x] LazyDocker
 - [ ] LazyGit
 - [ ] window tiling or determine how to switch spaces quickly
-- [ ] VS Code
-- [ ] Ensure .NET core works
-- [ ] Obsidian
-- [ ] OpenVPN (or get NordVPN working)
-- [ ] BitWarden
-- [ ] Steam
+- [x] VS Code
+- [x] Ensure .NET core works
+- [x] Obsidian
+- [x] Mulllvad VPN
+- [x] BitWarden
+- [x] Steam
 
 # Shell Tooling
-- [ ] fzf
-- [ ] Zoxide
-- [ ] ripgrep
-- [ ] eza (alias it as 'ls', 'lta' should list it as two levels deep of nestingn, 'lsa' should give me a listing including hidden files, 'lta' is nested listing files)
-- [ ] fd
+- [x] fzf
+- [x] Zoxide
+- [x] ripgrep
+- [ ] eza (alias it as 'ls', 'lta' should list it as two levels deep of nestingn, 'lsa' should give me a listing including hidden files, 'lta' is nested listing files) - May not be maintained anymore...
+- [x] fd
 
