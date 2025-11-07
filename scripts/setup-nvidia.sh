@@ -80,6 +80,7 @@ if lsmod | grep -q nouveau; then
     
     print_warning_message "Nouveau driver will be disabled on next reboot"
     REBOOT_REQUIRED=true
+    INITRAMFS_UPDATE_REQUIRED=true
 else
     print_info_message "Nouveau driver not loaded"
 fi
@@ -106,6 +107,8 @@ if ! rpm -q akmod-nvidia &> /dev/null; then
     
     print_info_message "NVIDIA drivers installed successfully"
     REBOOT_REQUIRED=true
+    INITRAMFS_UPDATE_REQUIRED=true
+    AKMOD_BUILD_REQUIRED=true
 else
     print_info_message "NVIDIA drivers already installed"
     INSTALLED_VERSION=$(rpm -q akmod-nvidia 2>/dev/null || echo 'unknown')
@@ -122,19 +125,28 @@ print_info_message "Configuring NVIDIA settings..."
 if [ ! -f /etc/modprobe.d/nvidia-drm.conf ]; then
     echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
     print_info_message "Enabled NVIDIA DRM kernel mode setting for Wayland support"
+    INITRAMFS_UPDATE_REQUIRED=true
 fi
 
-# Update initramfs to include NVIDIA modules
-print_info_message "Updating initramfs with NVIDIA modules..."
-sudo dracut --force
+# Update initramfs to include NVIDIA modules (only if changes were made)
+if [ "${INITRAMFS_UPDATE_REQUIRED:-false}" = true ]; then
+    print_info_message "Updating initramfs with NVIDIA modules..."
+    sudo dracut --force
+else
+    print_info_message "No initramfs update required - skipping dracut"
+fi
 
 # --------------------------
-# Wait for akmod to build
+# Wait for akmod to build (only if drivers were just installed)
 # --------------------------
 
-print_info_message "Waiting for NVIDIA kernel modules to build (this may take a few minutes)..."
-print_info_message "You can check the status with: sudo akmods --force"
-sudo akmods --force
+if [ "${AKMOD_BUILD_REQUIRED:-false}" = true ]; then
+    print_info_message "Waiting for NVIDIA kernel modules to build (this may take a few minutes)..."
+    print_info_message "You can check the status with: sudo akmods --force"
+    sudo akmods --force
+else
+    print_info_message "NVIDIA kernel modules already built - skipping akmods"
+fi
 
 # --------------------------
 # Install NVIDIA CUDA Toolkit (Optional)
