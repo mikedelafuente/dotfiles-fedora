@@ -188,7 +188,7 @@ fi
 # Install Essential Packages
 # --------------------------
 
-ESSENTIAL_PACKAGES=(git curl wget xsel fzf zoxide ripgrep fd)
+ESSENTIAL_PACKAGES=(git curl wget xsel fzf ripgrep fd)
 print_line_break "Installing essential packages"
 
 for package in "${ESSENTIAL_PACKAGES[@]}"; do
@@ -199,6 +199,16 @@ for package in "${ESSENTIAL_PACKAGES[@]}"; do
         print_info_message "$package is already installed. Skipping installation."
     fi
 done
+
+
+# Explicitly install zoxide and then initialize it in the shell profile
+if ! command -v z &> /dev/null; then
+    print_info_message "Installing zoxide via dnf"
+    sudo dnf install -y zoxide
+    eval "$(zoxide init bash)"
+else
+    print_info_message "zoxide is already installed. Skipping installation."
+fi
 
 # --------------------------
 # Run Individual Setup Scripts
