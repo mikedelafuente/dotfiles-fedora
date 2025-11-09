@@ -18,5 +18,6 @@
     "github.copilot.nextEditSuggestions.enabled": true,
     "window.zoomLevel": 0,
     "terminal.integrated.defaultProfile.linux": "bash",
-    "git.autofetch": true
+    "git.autofetch": true,
+    "chat.mcp.gallery.enabled": true
 }
