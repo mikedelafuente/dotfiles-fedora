@@ -19,5 +19,6 @@
     "window.zoomLevel": 0,
     "terminal.integrated.defaultProfile.linux": "bash",
     "git.autofetch": true,
-    "chat.mcp.gallery.enabled": true
+    "chat.mcp.gallery.enabled": true,
+    "go.toolsManagement.autoUpdate": true
 }
