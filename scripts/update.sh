@@ -154,9 +154,19 @@ fi
 print_info_message "Cleaning old journal logs..."
 sudo journalctl --vacuum-time=7d
 
-# Clean temporary files
-print_info_message "Cleaning temporary files..."
-sudo rm -rf /tmp/*
-sudo rm -rf /var/tmp/*
+# Clean temporary files (but preserve SSH agent sockets and other active sessions)
+print_info_message "Cleaning old temporary files..."
+# Use tmpwatch/tmpreaper or find to remove old files (older than 7 days) instead of wiping everything
+# This preserves SSH agent sockets, X11 sockets, and other active session files
+if command -v tmpwatch &> /dev/null; then
+    sudo tmpwatch 168 /tmp /var/tmp  # 168 hours = 7 days
+elif command -v tmpreaper &> /dev/null; then
+    sudo tmpreaper 7d /tmp /var/tmp
+else
+    # Fallback: use find to remove files older than 7 days
+    print_info_message "Removing files in /tmp older than 7 days..."
+    sudo find /tmp -type f -atime +7 -delete 2>/dev/null || true
+    sudo find /var/tmp -type f -atime +7 -delete 2>/dev/null || true
+fi
 
 print_info_message "System update and cleanup complete!"
