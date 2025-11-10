@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# --------------------------
+# Setup TablePlus for Fedora KDE
+# --------------------------
+# TablePlus is an application for managing multiple databases. It is installed via DNF from
+# the official TablePlus repository. This is the recommended method because:
+# - Official TablePlus package maintained by TablePlus
+# - Better integration with system libraries
+# - Standard Fedora package management via DNF
+# --------------------------
+
+# --------------------------
+# Import Common Header 
+# --------------------------
+
+# add header file
+CURRENT_FILE_DIR="$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
+
+# source header (uses SCRIPT_DIR and loads lib.sh)
+if [ -r "$CURRENT_FILE_DIR/dotheader.sh" ]; then
+  # shellcheck source=/dev/null
+  source "$CURRENT_FILE_DIR/dotheader.sh"
+else
+  echo "Missing header file: $CURRENT_FILE_DIR/dotheader.sh"
+  exit 1
+fi
+
+# --------------------------
+# End Import Common Header 
+# --------------------------
+
+print_tool_setup_start "TablePlus"
+
+# Check if TablePlus is already installed
+if command -v tableplus &> /dev/null; then
+  print_info_message "TablePlus is already installed."
+else
+    print_info_message "Installing TablePlus from official repository."
+
+    sudo rpm -v --import https://yum.tableplus.com/apt.tableplus.com.gpg.key
+    
+    sudo dnf config-manager addrepo --from-repofile=https://yum.tableplus.com/rpm/x86_64/tableplus.repo
+
+    sudo dnf install tableplus
+
+    print_info_message "TablePlus installation completed."
+    fi
+
+print_tool_setup_finish "TablePlus"
+

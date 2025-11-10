@@ -235,6 +235,9 @@ bash "$DF_SCRIPT_DIR/setup-golang.sh"
 # Before setting up Alacritty, ensure that VS Code is installed
 bash "$DF_SCRIPT_DIR/setup-vscode.sh"
 
+# Setup TablePlus for database management
+bash "$DF_SCRIPT_DIR/setup-tableplus.sh"
+
 # Setup a terminal emulator - Alacritty in this case
 bash "$DF_SCRIPT_DIR/setup-alacritty.sh"
 
