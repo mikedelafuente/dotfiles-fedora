@@ -1,0 +1,51 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🚀 Welcome to Your Dev Environment                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📁 Navigation Shortcuts:
+  ..      → Go up one directory          ...     → Go up two directories
+  -       → Go back to previous directory
+
+📂 File Operations:
+  la      → List all files with details   ll      → List files (human-readable)
+  mkdir   → Create directory with parents (auto)
+
+🔧 Git Commands:
+  gs/gst  → Git status                    ga      → Git add
+  gaa     → Git add all                   gc      → Git commit
+  gcm     → Git commit with message       gd      → Git diff
+  gp      → Git pull                      gpush   → Git push
+  gco     → Git checkout                  gb      → Git branch
+  glog    → Git log (pretty graph)        lg      → LazyGit (TUI)
+
+🐳 Docker Commands:
+  d       → Docker                        dc      → Docker compose
+  dcu     → Docker compose up             dcd     → Docker compose down
+  dps     → Docker ps                     dpsa    → Docker ps -a (all)
+  di      → Docker images                 dex     → Docker exec -it
+  dlogs   → Docker logs -f (follow)       lzd     → LazyDocker (TUI)
+
+💻 Development Tools:
+  v/vim     → NeoVim                      vimcheat → Neovim cheat sheet
+  py        → Python3                     serve    → Start HTTP server (port 8000)
+  jsonpp    → Pretty print JSON           myip     → Show public IP address
+
+🤖 AI Assistant (GitHub Copilot CLI):
+  ??        → Ask for any command help    git?     → Git-specific help
+  gh?       → GitHub CLI help
+  Note: Run 'github-copilot-cli auth' to authenticate first
+
+🔑 Key Bindings:
+  Up Arrow    → Search history backward (type prefix first!)
+  Down Arrow  → Search history forward
+  Ctrl+F      → Jump forward one word
+  Ctrl+B      → Jump backward one word
+  Ctrl+K      → Delete from cursor to end of line
+  Ctrl+U      → Delete from cursor to start of line
+  Ctrl+W      → Delete word backward
+
+💡 Utilities:
+  c       → Clear screen                  h       → Show history
+  path    → Display PATH (one per line)   reload  → Reload .bashrc
+  aliases → Show all custom aliases & bindings
+

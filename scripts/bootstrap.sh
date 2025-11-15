@@ -194,6 +194,9 @@ bash "$DF_SCRIPT_DIR/setup-essentials.sh"
 # Set up Git configuration
 bash "$DF_SCRIPT_DIR/setup-git.sh" "$FULL_NAME" "$EMAIL_ADDRESS"
 
+# Setup GitHub CLI and Copilot CLI
+bash "$DF_SCRIPT_DIR/setup-github-cli.sh"
+
 # Setup Python
 bash "$DF_SCRIPT_DIR/setup-python.sh"
 

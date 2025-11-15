@@ -2,17 +2,21 @@
 
 # Give a small intro message upon starting a new shell that most developers use
 echo "Welcome $USER! Type 'aliases' to see custom aliases and key bindings."
-
+if command -v github-copilot-cli &> /dev/null; then
+    echo ""
+    echo "🤖 AI Assistant (GitHub Copilot CLI):"
+    echo "  ??        → Ask for any command help"
+fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+        elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
 
@@ -110,6 +114,12 @@ alias vimcheat='bat ~/.nvim-cheatsheet.md --style=plain --paging=always'
 alias serve='python3 -m http.server'
 alias jsonpp='python3 -m json.tool'
 alias myip='curl ifconfig.me'
+
+# GitHub Copilot CLI
+# Note: Requires authentication first with: github-copilot-cli auth
+if command -v github-copilot-cli &> /dev/null; then
+    eval "$(github-copilot-cli alias -- "$0")"
+fi
 
 # Functions
 
@@ -224,6 +234,16 @@ aliases() {
         echo ""
         echo "  💡 Zoxide learns from your cd usage and lets you jump to frequently"
         echo "     used directories by typing partial names. Just use it for a while!"
+        
+        # Add GitHub Copilot CLI aliases if available
+        if command -v github-copilot-cli &> /dev/null; then
+            echo ""
+            echo "🤖 AI Assistant (GitHub Copilot CLI):"
+            echo "  ??        → Ask for any command help"
+            echo "  git?     → Git-specific help"
+            echo "  gh?       → GitHub CLI help"
+            echo "  Note: Run 'github-copilot-cli auth' to authenticate first"
+        fi
         
         echo ""
     } > "$temp_file"
