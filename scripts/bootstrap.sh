@@ -185,34 +185,11 @@ else
 fi
 
 # --------------------------
-# Install Essential Packages
-# --------------------------
-
-ESSENTIAL_PACKAGES=(git curl wget xsel fzf ripgrep fd bat)
-print_line_break "Installing essential packages"
-
-for package in "${ESSENTIAL_PACKAGES[@]}"; do
-    if ! dnf list installed "$package" &> /dev/null; then
-        print_info_message "Installing $package"
-        sudo dnf install -y "$package"
-    else
-        print_info_message "$package is already installed. Skipping installation."
-    fi
-done
-
-
-# Explicitly install zoxide and then initialize it in the shell profile
-if ! command -v z &> /dev/null; then
-    print_info_message "Installing zoxide via dnf"
-    sudo dnf install -y zoxide
-    eval "$(zoxide init bash)"
-else
-    print_info_message "zoxide is already installed. Skipping installation."
-fi
-
-# --------------------------
 # Run Individual Setup Scripts
 # --------------------------
+
+# Install Essential Packages
+bash "$DF_SCRIPT_DIR/setup-essentials.sh"
 
 # Set up Git configuration
 bash "$DF_SCRIPT_DIR/setup-git.sh" "$FULL_NAME" "$EMAIL_ADDRESS"

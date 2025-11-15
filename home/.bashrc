@@ -46,6 +46,9 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
+alias z='zoxide'
+alias zi='zoxide query -i'  # Interactive selection
+alias zq='zoxide query'      # Query without changing directory
 
 # File Operations
 alias ls='ls --color=auto'
@@ -178,7 +181,49 @@ aliases() {
         printf "  %-20s → %s\n" "Ctrl+W" "Delete word backward"
         
         echo ""
-        echo "💡 Tip: Type 'welcome' to see the full welcome message with descriptions"
+        echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+        echo "║                        🛠️  Essential Tools Installed                         ║"
+        echo "╚══════════════════════════════════════════════════════════════════════════════╝"
+        echo ""
+        
+        # Show essential packages from bootstrap.sh (keep in sync with ESSENTIAL_PACKAGES)
+        # Alphabetically sorted for easier reading
+        printf "  %-12s → %s\n" "bat" "Cat clone with syntax highlighting"
+        printf "  %-12s → %s\n" "btop" "Resource monitor (better than htop)"
+        printf "  %-12s → %s\n" "curl" "Transfer data from/to servers"
+        printf "  %-12s → %s\n" "duf" "Better disk usage utility (modern df)"
+        printf "  %-12s → %s\n" "fastfetch" "System information display (neofetch successor)"
+        printf "  %-12s → %s\n" "fd" "Fast alternative to find (fd command)"
+        printf "  %-12s → %s\n" "fzf" "Fuzzy finder for command-line"
+        printf "  %-12s → %s\n" "gh" "GitHub CLI"
+        printf "  %-12s → %s\n" "git" "Version control system"
+        printf "  %-12s → %s\n" "htop" "Interactive process viewer"
+        printf "  %-12s → %s\n" "jq" "JSON processor for command line"
+        printf "  %-12s → %s\n" "ncdu" "Disk usage analyzer with ncurses"
+        printf "  %-12s → %s\n" "net-tools" "Network utilities (netstat, ifconfig)"
+        printf "  %-12s → %s\n" "ripgrep" "Fast recursive search (rg command)"
+        printf "  %-12s → %s\n" "shellcheck" "Shell script analysis tool"
+        printf "  %-12s → %s\n" "stow" "Symlink farm manager for dotfiles"
+        printf "  %-12s → %s\n" "tldr" "Simplified man pages with examples"
+        printf "  %-12s → %s\n" "tmux" "Terminal multiplexer"
+        printf "  %-12s → %s\n" "tree" "Display directory structure as tree"
+        printf "  %-12s → %s\n" "wget" "Download files from the web"
+        printf "  %-12s → %s\n" "xsel" "Clipboard manipulation tool"
+        printf "  %-12s → %s\n" "zoxide" "Smart cd - learns your navigation habits - current aliases z, zi, zq"
+        
+        echo ""
+        echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+        echo "║                        🧭 Zoxide Usage (Smart Navigation)                    ║"
+        echo "╚══════════════════════════════════════════════════════════════════════════════╝"
+        echo ""
+        printf "  %-12s → %s\n" "z <keyword>" "Jump to directory (e.g., 'z dotfiles')"
+        printf "  %-12s → %s\n" "zi <keyword>" "Interactive directory selection"
+        printf "  %-12s → %s\n" "z -" "Go back to previous directory"
+        printf "  %-12s → %s\n" "zq <keyword>" "Query directory path without jumping"
+        echo ""
+        echo "  💡 Zoxide learns from your cd usage and lets you jump to frequently"
+        echo "     used directories by typing partial names. Just use it for a while!"
+        
         echo ""
     } > "$temp_file"
     
