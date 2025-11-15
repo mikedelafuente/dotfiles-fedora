@@ -259,6 +259,9 @@ bash "$DF_SCRIPT_DIR/setup-node.sh"
 # Install .NET SDK and Rider
 bash "$DF_SCRIPT_DIR/setup-dotnet-rider.sh" "$DOTNET_CORE_SDK_VERSION"
 
+# Install PHP
+bash "$DF_SCRIPT_DIR/setup-php.sh"
+
 # Install Godot 4 Mono
 bash "$DF_SCRIPT_DIR/setup-godot.sh"
 

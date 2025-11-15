@@ -75,3 +75,9 @@ export NVM_DIR="$HOME/.config/nvm"
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init bash)"
 fi
+
+# Herd Lite PHP environment variables if installed
+if [ -d "$HOME/.config/herd-lite/bin" ]; then
+    export PATH="$HOME/.config/herd-lite/bin:$PATH"
+    export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+fi
