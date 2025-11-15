@@ -38,6 +38,11 @@ print_action_message() {
   echo -e "\e[38;5;208m$message\e[0m"
 }
 
+print_success_message() {
+  local message="$1"
+  echo -e "\e[32m$message\e[0m"
+}
+
 # Function to print a warning message in yellow
 print_warning_message() {
   local message="$1"
