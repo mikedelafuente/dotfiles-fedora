@@ -43,6 +43,11 @@ alias gc='git commit'
 alias gco='git checkout'
 alias lg='lazygit'
 
+# History search with arrow keys
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+
 
 
 
