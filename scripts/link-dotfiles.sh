@@ -42,7 +42,7 @@ DOTFILES_CONFIG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.config"
 
 print_info_message "Linking home directory dotfiles..."
 
-for file in .bashrc .profile .gitconfig .gitignore_global; do
+for file in .bashrc .profile .gitconfig .gitignore_global .nvim-cheatsheet.md; do
   target="$USER_HOME_DIR/$file"
   source_file="$DOTFILES_HOME_DIR/$file"
   
