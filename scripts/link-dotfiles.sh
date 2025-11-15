@@ -90,5 +90,4 @@ find "$CONFIG_SOURCE_DIR" -type f | while read -r file; do
   print_info_message "Linked: .config/$relative_path"
 done
 
-
 print_tool_setup_complete "Linking dotfiles"

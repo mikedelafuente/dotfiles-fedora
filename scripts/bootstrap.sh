@@ -188,7 +188,7 @@ fi
 # Install Essential Packages
 # --------------------------
 
-ESSENTIAL_PACKAGES=(git curl wget xsel fzf ripgrep fd)
+ESSENTIAL_PACKAGES=(git curl wget xsel fzf ripgrep fd bat)
 print_line_break "Installing essential packages"
 
 for package in "${ESSENTIAL_PACKAGES[@]}"; do
