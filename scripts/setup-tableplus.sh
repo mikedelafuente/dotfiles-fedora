@@ -47,5 +47,5 @@ else
     print_info_message "TablePlus installation completed."
     fi
 
-print_tool_setup_finish "TablePlus"
+print_tool_setup_complete "TablePlus"
 
