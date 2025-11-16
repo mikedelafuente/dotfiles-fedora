@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 
 # --------------------------
 # Setup KDE Plasma Configuration for Fedora KDE
@@ -149,7 +149,10 @@ if [ -n "$KWRITECONFIG" ]; then
     # Use crudini or direct editing to set shortcuts
     if command -v crudini &> /dev/null; then
         # crudini can handle nested sections
+        # Launch Tmux with Meta+T and disable Konsole shortcut
+        crudini --set "$SHORTCUTS_FILE" "services][Alacritty.desktop" "_launch" "Ctrl+Alt+T\\tMeta+Return"
         crudini --set "$SHORTCUTS_FILE" "services][Alacritty.desktop" "_launch" "Ctrl+Alt+T\\tMeta+Return\\tMeta+T"
+        crudini --set "$SHORTCUTS_FILE" "services][alacritty.desktop" "_launch" "Ctrl+Alt+T\\tMeta+Return\\tMeta+T"
         crudini --set "$SHORTCUTS_FILE" "services][org.kde.konsole.desktop" "_launch" "none"
     else
         # Fallback: use sed to edit the file directly

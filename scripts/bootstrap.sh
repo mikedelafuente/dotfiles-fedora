@@ -236,6 +236,9 @@ bash "$DF_SCRIPT_DIR/setup-docker.sh"
 # Install Node.js and npm
 bash "$DF_SCRIPT_DIR/setup-node.sh"
 
+# Install Claude Code CLI
+bash "$DF_SCRIPT_DIR/setup-claude.sh"
+
 # Install .NET SDK and Rider
 bash "$DF_SCRIPT_DIR/setup-dotnet-rider.sh" "$DOTNET_CORE_SDK_VERSION"
 

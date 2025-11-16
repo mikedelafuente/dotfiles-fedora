@@ -1,12 +1,17 @@
 # ~/.bashrc
 
+# -------------------------
+# Readline Configuration
+# -------------------------
+# Use custom .inputrc for readline settings (tab completion, key bindings, etc.)
+export INPUTRC=~/.inputrc
 
 # ----------------
 # Source - https://stackoverflow.com/a
 # Posted by jogarcia, modified by community. See post 'Timeline' for change history
 # Retrieved 2025-11-16, License - CC BY-SA 4.0
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  tmux
+    tmux
 fi
 # ----------------
 
@@ -144,26 +149,21 @@ touch() {
     done
 }
 
-# History search with arrow keys
-# Make sure these bindings are in sync with the 'aliases' function below
-bind '"\e[A": history-search-backward'  # Up arrow
-bind '"\e[B": history-search-forward'   # Down arrow
-bind '"\C-f": forward-word'              # Ctrl+F - jump forward one word
-bind '"\C-b": backward-word'             # Ctrl+B - jump backward one word
-bind '"\C-k": kill-line'                 # Ctrl+K - delete to end of line
-bind '"\C-u": backward-kill-line'        # Ctrl+U - delete to start of line
-bind '"\C-w": backward-kill-word'        # Ctrl+W - delete word backward
+# -------------------------
+# Note: Key bindings and completion settings are now in ~/.inputrc
+# See $INPUTRC for tab completion, history search, and editing keybindings
+# -------------------------
 
 # Function to display welcome message
 welcome() {
-    if [ -f "$HOME/.welcome_message" ]; then
+    if [ -f "$HOME/.welcome.md" ]; then
         if command -v bat &> /dev/null; then
-            bat --style=plain --paging=never "$HOME/.welcome_message"
+            bat --style=grid --paging=never "$HOME/.welcome.md"
         else
-            cat "$HOME/.welcome_message"
+            cat "$HOME/.welcome.md"
         fi
     else
-        echo "Welcome message file not found at $HOME/.welcome_message"
+        echo "Welcome message file not found at $HOME/.welcome.md"
     fi
 }
 
@@ -193,14 +193,22 @@ aliases() {
         echo ""
         
         # Display key bindings in readable format - only show our custom bindings
-        # This must be maintained in sync with the bind commands above
-        printf "  %-20s → %s\n" "Up Arrow" "Search history backward (with prefix)"
-        printf "  %-20s → %s\n" "Down Arrow" "Search history forward (with prefix)"
-        printf "  %-20s → %s\n" "Ctrl+F" "Jump forward one word"
-        printf "  %-20s → %s\n" "Ctrl+B" "Jump backward one word"
-        printf "  %-20s → %s\n" "Ctrl+K" "Delete from cursor to end of line"
-        printf "  %-20s → %s\n" "Ctrl+U" "Delete from cursor to start of line"
-        printf "  %-20s → %s\n" "Ctrl+W" "Delete word backward"
+        # These are configured in ~/.inputrc (tmux-compatible)
+        printf "  %-22s → %s\n" "Tab" "Cycle through completions (menu-style)"
+        printf "  %-22s → %s\n" "Shift+Tab" "Cycle backward through completions"
+        printf "  %-22s → %s\n" "Up Arrow" "Search history backward (with prefix)"
+        printf "  %-22s → %s\n" "Down Arrow" "Search history forward (with prefix)"
+        printf "  %-22s → %s\n" "Ctrl+Right/Alt+F" "Jump forward one word"
+        printf "  %-22s → %s\n" "Ctrl+Left/Alt+B" "Jump backward one word"
+        printf "  %-22s → %s\n" "Ctrl+K" "Delete from cursor to end of line"
+        printf "  %-22s → %s\n" "Ctrl+U" "Delete from cursor to start of line"
+        printf "  %-22s → %s\n" "Ctrl+W" "Delete word backward"
+        printf "  %-22s → %s\n" "Ctrl+A" "Go to beginning of line"
+        printf "  %-22s → %s\n" "Ctrl+E" "Go to end of line"
+        
+        echo ""
+        echo "  💡 Note: All key bindings configured in ~/.inputrc"
+        echo "     Run 'bat ~/.inputrc' to see full readline configuration"
         
         echo ""
         echo "╔══════════════════════════════════════════════════════════════════════════════╗"
