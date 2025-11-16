@@ -21,6 +21,12 @@ style = "Medium Italic"
 family = "Hack Nerd Font Mono"
 style = "Medium"
 
-[window.dimensions]
-columns = 140
-lines = 60
+[window.padding]
+x = 5
+y = 5
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[mouse]

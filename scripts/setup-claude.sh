@@ -31,7 +31,7 @@ fi
 # Install Claude Code via npm
 if ! command -v claude-code &> /dev/null; then
     print_info_message "Installing Claude Code..."
-    npm install -g @anthropic-ai/claude-code
+    sudo npm install -g @anthropic-ai/claude-code
 else
     print_info_message "Claude Code is already installed."
 fi 

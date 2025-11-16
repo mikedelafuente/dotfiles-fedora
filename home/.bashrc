@@ -11,6 +11,7 @@ export INPUTRC=~/.inputrc
 # Posted by jogarcia, modified by community. See post 'Timeline' for change history
 # Retrieved 2025-11-16, License - CC BY-SA 4.0
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    echo "Starting tmux..."
     tmux
 fi
 # ----------------
