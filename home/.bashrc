@@ -1,5 +1,16 @@
 # ~/.bashrc
 
+
+# ----------------
+# Source - https://stackoverflow.com/a
+# Posted by jogarcia, modified by community. See post 'Timeline' for change history
+# Retrieved 2025-11-16, License - CC BY-SA 4.0
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  tmux
+fi
+# ----------------
+
+
 # Give a small intro message upon starting a new shell that most developers use
 echo "Welcome $USER! Type 'aliases' to see custom aliases and key bindings."
 if command -v github-copilot-cli &> /dev/null; then
