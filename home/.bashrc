@@ -211,6 +211,7 @@ aliases() {
         echo "  💡 Note: All key bindings configured in ~/.inputrc"
         echo "     Run 'bat ~/.inputrc' to see full readline configuration"
         
+        
         echo ""
         echo "╔══════════════════════════════════════════════════════════════════════════════╗"
         echo "║                        🛠️  Essential Tools Installed                         ║"
@@ -219,41 +220,117 @@ aliases() {
         
         # Show essential packages from bootstrap.sh (keep in sync with ESSENTIAL_PACKAGES)
         # Alphabetically sorted for easier reading
-        printf "  %-12s → %s\n" "bat" "Cat clone with syntax highlighting"
-        printf "  %-12s → %s\n" "btop" "Resource monitor (better than htop)"
-        printf "  %-12s → %s\n" "curl" "Transfer data from/to servers"
-        printf "  %-12s → %s\n" "duf" "Better disk usage utility (modern df)"
-        printf "  %-12s → %s\n" "fastfetch" "System information display (neofetch successor)"
-        printf "  %-12s → %s\n" "fd" "Fast alternative to find (fd command)"
-        printf "  %-12s → %s\n" "fzf" "Fuzzy finder for command-line"
-        printf "  %-12s → %s\n" "gh" "GitHub CLI"
-        printf "  %-12s → %s\n" "git" "Version control system"
-        printf "  %-12s → %s\n" "htop" "Interactive process viewer"
-        printf "  %-12s → %s\n" "jq" "JSON processor for command line"
-        printf "  %-12s → %s\n" "ncdu" "Disk usage analyzer with ncurses"
-        printf "  %-12s → %s\n" "net-tools" "Network utilities (netstat, ifconfig)"
-        printf "  %-12s → %s\n" "ripgrep" "Fast recursive search (rg command)"
-        printf "  %-12s → %s\n" "shellcheck" "Shell script analysis tool"
-        printf "  %-12s → %s\n" "stow" "Symlink farm manager for dotfiles"
-        printf "  %-12s → %s\n" "tldr" "Simplified man pages with examples"
-        printf "  %-12s → %s\n" "tmux" "Terminal multiplexer"
-        printf "  %-12s → %s\n" "tree" "Display directory structure as tree"
-        printf "  %-12s → %s\n" "wget" "Download files from the web"
-        printf "  %-12s → %s\n" "xsel" "Clipboard manipulation tool"
-        printf "  %-12s → %s\n" "zoxide" "Smart cd - learns your navigation habits - current aliases z, zi, zq"
+        local tools=(
+            "bat:Cat clone with syntax highlighting"
+            "btop:Resource monitor (better than htop)"
+            "curl:Transfer data from/to servers"
+            "duf:Better disk usage utility (modern df)"
+            "fastfetch:System information display (neofetch successor)"
+            "fd:Fast alternative to find (fd command)"
+            "fzf:Fuzzy finder for command-line"
+            "gh:GitHub CLI"
+            "git:Version control system"
+            "htop:Interactive process viewer"
+            "jq:JSON processor for command line"
+            "ncdu:Disk usage analyzer with ncurses"
+            "netstat:Network utilities (netstat, ifconfig)"
+            "ripgrep:Fast recursive search (rg command)"
+            "shellcheck:Shell script analysis tool"
+            "stow:Symlink farm manager for dotfiles"
+            "tldr:Simplified man pages with examples"
+            "tmux:Terminal multiplexer"
+            "tree:Display directory structure as tree"
+            "wget:Download files from the web"
+            "xsel:Clipboard manipulation tool"
+            "zoxide:Smart cd - learns your navigation habits - current aliases z, zi, zq"
+        )
         
-        echo ""
-        echo "╔══════════════════════════════════════════════════════════════════════════════╗"
-        echo "║                        🧭 Zoxide Usage (Smart Navigation)                    ║"
-        echo "╚══════════════════════════════════════════════════════════════════════════════╝"
-        echo ""
-        printf "  %-12s → %s\n" "z <keyword>" "Jump to directory (e.g., 'z dotfiles')"
-        printf "  %-12s → %s\n" "zi <keyword>" "Interactive directory selection"
-        printf "  %-12s → %s\n" "z -" "Go back to previous directory"
-        printf "  %-12s → %s\n" "zq <keyword>" "Query directory path without jumping"
-        echo ""
-        echo "  💡 Zoxide learns from your cd usage and lets you jump to frequently"
-        echo "     used directories by typing partial names. Just use it for a while!"
+        for tool_info in "${tools[@]}"; do
+            local tool="${tool_info%%:*}"
+            local desc="${tool_info#*:}"
+            # Special case for ripgrep which uses 'rg' command
+            if [ "$tool" = "ripgrep" ]; then
+                if command -v rg &> /dev/null; then
+                    printf "  %-12s → %s\n" "$tool" "$desc"
+                else
+                    printf "  \033[0;31m%-12s\033[0m → %s\n" "MISSING" "$tool" "$desc"
+                fi
+            else
+                if command -v "$tool" &> /dev/null; then
+                    printf "  %-12s → %s\n" "$tool" "$desc"
+                else
+                    printf "  \033[0;31m%-12s\033[0m → %s\n" "MISSING" "$tool" "$desc"
+                fi
+            fi
+        done
+        
+        if command -v zoxide &> /dev/null; then
+            
+            echo ""
+            echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+            echo "║                        🧭 Zoxide Usage (Smart Navigation)                    ║"
+            echo "╚══════════════════════════════════════════════════════════════════════════════╝"
+            echo ""
+            printf "  %-12s → %s\n" "z <keyword>" "Jump to directory (e.g., 'z dotfiles')"
+            printf "  %-12s → %s\n" "zi <keyword>" "Interactive directory selection"
+            printf "  %-12s → %s\n" "z -" "Go back to previous directory"
+            printf "  %-12s → %s\n" "zq <keyword>" "Query directory path without jumping"
+            echo ""
+            echo "  💡 Zoxide learns from your cd usage and lets you jump to frequently"
+            echo "     used directories by typing partial names. Just use it for a while!"
+        fi
+        
+        if command -v tmux &> /dev/null; then
+            
+            echo ""
+            echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+            echo "║                         🪟  Tmux Key Bindings                                ║"
+            echo "╚══════════════════════════════════════════════════════════════════════════════╝"
+            echo ""
+            echo "  Prefix: Ctrl+B (press first, then the command key)"
+            echo ""
+            
+            # Session Management
+            printf "  %-22s → %s\n" "Ctrl+B  d" "Detach from session"
+            printf "  %-22s → %s\n" "Ctrl+B  $" "Rename current session"
+            printf "  %-22s → %s\n" "Ctrl+B  s" "List/switch sessions"
+            
+            echo ""
+            # Window Management
+            printf "  %-22s → %s\n" "Ctrl+B  c" "Create new window"
+            printf "  %-22s → %s\n" "Ctrl+B  ," "Rename current window"
+            printf "  %-22s → %s\n" "Ctrl+B  w" "List/switch windows"
+            printf "  %-22s → %s\n" "Ctrl+B  n" "Next window"
+            printf "  %-22s → %s\n" "Ctrl+B  p" "Previous window"
+            printf "  %-22s → %s\n" "Ctrl+B  0-9" "Switch to window number"
+            printf "  %-22s → %s\n" "Ctrl+B  &" "Kill current window"
+            
+            echo ""
+            # Pane Management
+            printf "  %-22s → %s\n" "Ctrl+B  %" "Split pane vertically"
+            printf "  %-22s → %s\n" "Ctrl+B  \"" "Split pane horizontally"
+            printf "  %-22s → %s\n" "Ctrl+B  o" "Switch to next pane"
+            printf "  %-22s → %s\n" "Ctrl+B  ;" "Toggle last pane"
+            printf "  %-22s → %s\n" "Ctrl+B  x" "Kill current pane"
+            printf "  %-22s → %s\n" "Ctrl+B  {" "Move pane left"
+            printf "  %-22s → %s\n" "Ctrl+B  }" "Move pane right"
+            printf "  %-22s → %s\n" "Ctrl+B  z" "Toggle pane zoom (fullscreen)"
+            printf "  %-22s → %s\n" "Ctrl+B  ↑↓←→" "Navigate between panes"
+            
+            echo ""
+            # Copy Mode
+            printf "  %-22s → %s\n" "Ctrl+B  [" "Enter copy mode (scroll/search)"
+            printf "  %-22s → %s\n" "Ctrl+B  ]" "Paste from buffer"
+            printf "  %-22s → %s\n" "q (in copy mode)" "Exit copy mode"
+            
+            echo ""
+            # Helpful Commands
+            printf "  %-22s → %s\n" "Ctrl+B  ?" "Show all key bindings"
+            printf "  %-22s → %s\n" "Ctrl+B  t" "Show time"
+            
+            echo ""
+            echo "  💡 Outside tmux: 'tmux' (start), 'tmux ls' (list), 'tmux attach' (reconnect)"
+        fi
         
         # Add GitHub Copilot CLI aliases if available
         if command -v github-copilot-cli &> /dev/null; then
