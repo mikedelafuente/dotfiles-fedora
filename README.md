@@ -1,92 +1,97 @@
 # Dotfiles for Fedora KDE
 
-This repository contains my personal dotfiles and configuration for Fedora KDE Plasma. The goal of this project is to provide a streamlined setup and configuration for my development environment on Fedora.
+A complete, automated development environment setup for Fedora KDE Plasma. From zero to a fully configured machine with development tools, terminals, editors, and applications in one command.
 
-## Table of Contents
+## What You Get
 
-- [Installation](#installation)
-- [Configuration Files](#configuration-files)
-- [Scripts](#scripts)
-- [Installation Methods](#installation-methods)
-- [License](#license)
+Run the bootstrap script once and get:
 
-## Installation
+- **Modern Shell Setup**: Bash with Starship prompt + aliases/functions
+- **Terminal Emulator**: Alacritty (GPU-accelerated) with custom theming
+- **Editors & IDEs**: Neovim with LazyVim, VS Code, JetBrains Rider
+- **Development Tools**: Git with GitHub CLI, Docker, lazygit, lazydocker
+- **Language Ecosystems**: Rust (rustup), Node.js (nvm), .NET SDK, Python, Go, PHP
+- **CLI Productivity**: fzf (fuzzy finder), ripgrep, fd, zoxide smart navigation
+- **Applications**: Discord, Spotify, Obsidian, Steam, Postman, Godot 4, Zoom
+- **System Extras**: Fonts (Nerd Fonts), Mullvad VPN, NVIDIA drivers, KDE customizations
 
-To set up the environment, run the following command:
+Everything is linked to your home directory with sensible defaults and carefully curated configurations.
+
+## Quick Start
 
 ```bash
+git clone <your-github-url> dotfiles-fedora
+cd dotfiles-fedora
 bash scripts/bootstrap.sh
 ```
 
-This script will:
-- Install essential packages and dependencies
-- Configure Flatpak with Flathub repository
-- Install development tools and applications
-- Set up KDE Plasma customizations
-- Link dotfiles to your home directory
+The bootstrap script will prompt you for:
+- Full name (for Git configuration)
+- Email address (for Git configuration)
+- .NET SDK version (default: 9.0)
 
-**Note:** The bootstrap script will prompt for some configuration values (name, email, .NET SDK version) on first run.
+Everything else is automated—the script installs all tools, configures your shell, links dotfiles, and sets up your development environment. Just answer the prompts and grab coffee!
+
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [What Gets Installed](#what-gets-installed)
+- [Configuration Files](#configuration-files)
+- [Installation Methods](#installation-methods)
+- [CLI Quick Reference](#cli-quick-reference)
+- [License](#license)
 
 ## What Gets Installed
 
-The bootstrap script installs a comprehensive development environment with the following tools:
-
-### Essential CLI Tools
-- **git** - Version control system
-- **curl** - Command line tool for transferring data
-- **wget** - Network downloader
-- **xsel** - Command-line clipboard manipulation
-- **fzf** - Fuzzy finder for files and commands
-- **zoxide** - Smart directory navigation (`z` command)
-- **ripgrep** (`rg`) - Fast text search tool
-- **fd** - Fast alternative to `find`
-
-### Development Tools & Languages
-
-#### Rust Ecosystem
-- **rustup** - Rust toolchain installer and version manager
-- **cargo** - Rust package manager and build tool
-- **rustc** - Rust compiler
-
-#### Node.js Ecosystem
-- **nvm** - Node Version Manager
-- **node** - JavaScript runtime
-- **npm** - Node package manager
-
-#### .NET Ecosystem
-- **.NET SDK** - Microsoft's development framework
-- **JetBrains Rider** - .NET IDE
-
-#### Text Editors & IDEs
-- **Neovim** with **LazyVim** - Modern Vim-based editor
-- **VS Code** - Microsoft's code editor
-
-#### Containerization
-- **Docker** - Container platform
-- **lazydocker** - Terminal UI for Docker management
-
-#### Version Control UI
-- **lazygit** - Terminal UI for Git - Make sure to watch [LazyGit](https://www.youtube.com/watch?v=CPLdltN7wgE)
+The bootstrap script installs a comprehensive development environment organized by category:
 
 ### Shell & Terminal
-- **Bash** - Default shell
-- **Starship** - Cross-shell prompt
-- **Alacritty** - GPU-accelerated terminal emulator
+- **Bash** - Default shell with custom configurations
+- **Starship** - Fast, customizable shell prompt
+- **Alacritty** - GPU-accelerated terminal emulator with theming
 
-### Applications (Flatpak/System)
-- **Discord** - Communication platform
+### Editors & IDEs
+- **Neovim** with **LazyVim** - Modern Vim setup with lazy plugin loading
+- **VS Code** - Visual Studio Code with custom settings
+- **JetBrains Rider** - Full-featured .NET IDE
+
+### Development Tools
+- **Git** + **GitHub CLI** - Version control with command-line interface
+- **lazygit** - Terminal UI for Git operations
+- **Docker** + **lazydocker** - Containerization with terminal UI
+
+### Language Ecosystems
+- **Rust** (via rustup) - Systems programming language
+- **Node.js** (via nvm) - JavaScript runtime with version management
+- **.NET SDK** (configurable version) - Microsoft's development framework
+- **Python** - Dynamic programming language
+- **Go** (golang) - Systems programming language
+- **PHP** - Server-side scripting language
+
+### CLI Productivity Tools
+- **fzf** - Fuzzy finder for files and commands
+- **ripgrep** (`rg`) - Fast text search across files
+- **fd** - Fast alternative to `find` command
+- **zoxide** - Smart directory navigation with `z` command
+- **curl** & **wget** - Command-line download tools
+- **xsel** - Clipboard manipulation from terminal
+
+### Applications
+- **Discord** - Communication and community (Flatpak)
 - **Spotify** - Music streaming
-- **Obsidian** - Note-taking and knowledge management
+- **Obsidian** - Knowledge base and note-taking app
 - **Steam** - Gaming platform
-- **Postman** - API development tool
-- **Godot 4 Mono** - Game engine
+- **Postman** - API development and testing
+- **Godot 4 Mono** - Game engine with C# support
 - **Zoom** - Video conferencing
+- **TablePlus** - Database management GUI
 - **Mullvad VPN** - Privacy-focused VPN client
 
-### System & Utilities
-- **NVIDIA drivers** - Graphics drivers (if NVIDIA GPU detected)
+### System Utilities
 - **Nerd Fonts** - Programming fonts with icons
-- **Flatpak** - Universal package system
+- **NVIDIA drivers** - GPU drivers (auto-detected if needed)
+- **Flatpak** - Universal package manager for Linux
+- **KDE Plasma customizations** - Optimized desktop environment settings
 
 ## CLI Quick Reference
 
@@ -174,78 +179,132 @@ xsel -b                   # Paste from clipboard
 
 ## Configuration Files
 
-The following configuration files are included in this repository:
+The following dotfiles are symlinked to your home directory during installation:
 
-- **home/.bashrc**: User-specific shell configuration for bash.
-- **home/.profile**: Executed at login to set up the user environment.
-- **home/.gitconfig**: Global Git configuration settings.
-- **home/.gitignore_global**: Global Git ignore file.
-- **.config/nvim/init.lua**: Main configuration file for Neovim with LazyVim.
-- **.config/starship.toml**: Configuration file for Starship prompt.
-- **.config/Code/User/settings.json**: User-specific settings for VS Code.
-- **.config/alacritty/alacritty.toml**: Configuration for Alacritty terminal.
-- **.config/lazygit/config.yml**: Configuration for LazyGit.
-- **.config/lazydocker/config.yml**: Configuration for LazyDocker.
-- **.config/obsidian**: Configuration and vaults for Obsidian.
-- **.config/openvpn**: Configuration files for OpenVPN.
+### Shell Configuration
+- **home/.bashrc**: Bash shell configuration with aliases and functions
+- **home/.profile**: Login environment setup
 
-## Scripts
+### Git Configuration
+- **home/.gitconfig**: Global Git settings (user info, core settings)
+- **home/.gitignore_global**: Global gitignore patterns
 
-The following scripts are included to automate setup and configuration:
+### Editor & IDE Configuration
+- **.config/nvim/init.lua**: Neovim configuration with LazyVim
+- **.config/Code/User/settings.json**: VS Code user settings
+- **.config/starship.toml**: Starship prompt configuration
 
-### Core Scripts
-- **scripts/bootstrap.sh**: Main setup script that orchestrates the entire installation
-- **scripts/dotheader.sh**: Common header imported by all setup scripts
-- **scripts/fn-lib.sh**: Library of reusable bash functions
-- **scripts/link-dotfiles.sh**: Symlinks configuration files to home directory
+### Terminal & Application Configuration
+- **.config/alacritty/alacritty.toml**: Alacritty terminal emulator configuration
+- **.config/lazygit/config.yml**: LazyGit configuration
+- **.config/lazydocker/config.yml**: LazyDocker configuration
 
-### Development Tools
-- **scripts/setup-git.sh**: Configures Git with user information
-- **scripts/setup-neovim.sh**: Installs Neovim and LazyVim configuration
-- **scripts/setup-vscode.sh**: Installs VS Code from official Microsoft repository
-- **scripts/setup-docker.sh**: Installs Docker from official Docker repository
-- **scripts/setup-node.sh**: Installs NVM (Node Version Manager) and Node.js
-- **scripts/setup-rust.sh**: Installs Rust toolchain via rustup
-- **scripts/setup-dotnet-rider.sh**: Installs .NET SDK and JetBrains Rider
+### Application Data
+- **.config/obsidian/**: Obsidian vaults and settings
+- **.config/openvpn/**: VPN configuration files
 
-### Applications
-- **scripts/setup-alacritty.sh**: Installs Alacritty terminal emulator
-- **scripts/setup-discord.sh**: Installs Discord (Flatpak - official)
-- **scripts/setup-spotify.sh**: Installs Spotify from official repository
-- **scripts/setup-obsidian.sh**: Installs Obsidian (Flatpak - verified)
-- **scripts/setup-postman.sh**: Installs Postman from official tarball
-- **scripts/setup-steam.sh**: Installs Steam from RPM Fusion
-- **scripts/setup-zoom.sh**: Installs Zoom from official RPM
-- **scripts/setup-godot.sh**: Installs Godot 4 Mono from GitHub releases
-- **scripts/setup-mullvad.sh**: Installs Mullvad VPN from official repository
+## Installation Scripts
+
+The bootstrap process runs 27 automated setup scripts:
+
+### Core Infrastructure
+- **bootstrap.sh** - Main orchestrator; prompts for config and runs all setup scripts
+- **setup-essentials.sh** - Core CLI tools, build dependencies, and system libraries
+- **setup-fonts.sh** - Installs Nerd Fonts for terminal and editor icons
+
+### Shell & Terminal
+- **setup-bash.sh** - Configures Bash and Starship prompt
+- **setup-alacritty.sh** - Installs and configures Alacritty terminal emulator
+
+### Development Tools & IDEs
+- **setup-git.sh** - Configures Git with your user information
+- **setup-github-cli.sh** - Installs GitHub CLI and Copilot CLI
+- **setup-neovim.sh** - Installs Neovim with LazyVim configuration
+- **setup-vscode.sh** - Installs VS Code from Microsoft repository
+- **setup-dotnet-rider.sh** - Installs .NET SDK and JetBrains Rider IDE
+
+### Language Ecosystems
+- **setup-rust.sh** - Installs Rust via rustup
+- **setup-node.sh** - Installs Node.js via NVM (Node Version Manager)
+- **setup-python.sh** - Installs Python and development tools
+- **setup-golang.sh** - Installs Go programming language
+- **setup-php.sh** - Installs PHP and development tools
+
+### Containerization & DevOps
+- **setup-docker.sh** - Installs Docker from official Docker repository
+- **setup-tableplus.sh** - Installs TablePlus database management tool
+
+### Applications (Flatpak & System)
+- **setup-discord.sh** - Discord via Flatpak (official)
+- **setup-spotify.sh** - Spotify from official repository
+- **setup-obsidian.sh** - Obsidian via Flatpak (verified)
+- **setup-postman.sh** - Postman API tool from official tarball
+- **setup-steam.sh** - Steam gaming platform via RPM Fusion
+- **setup-zoom.sh** - Zoom video conferencing from official RPM
+- **setup-godot.sh** - Godot 4 Mono game engine from GitHub releases
+- **setup-mullvad.sh** - Mullvad VPN from official repository
+- **setup-claude.sh** - Claude Code CLI for AI-assisted development
 
 ### System Configuration
-- **scripts/setup-bash.sh**: Configures Bash shell and Starship prompt
-- **scripts/setup-fonts.sh**: Installs Nerd Fonts
-- **scripts/setup-kde.sh**: Applies KDE Plasma customizations
+- **setup-nvidia.sh** - NVIDIA drivers (auto-detected if applicable)
+- **setup-kde.sh** - KDE Plasma desktop customizations
+- **link-dotfiles.sh** - Symlinks all dotfiles to home directory
 
 ## Installation Methods
 
-This dotfiles repository follows Fedora best practices for package installation:
+This repository follows Fedora best practices for package management:
 
-### Flatpak (for applications)
-Used when an **official verified** Flatpak exists on Flathub:
-- Discord (official from Discord Inc.)
-- Obsidian (verified by Obsidian team)
-- JetBrains Rider (official from JetBrains)
-- KDE Connect
+### Flatpak (for GUI Applications)
+Prefers official or verified Flatpaks from Flathub when available:
+- **Discord** (official from Discord Inc.)
+- **Obsidian** (verified by Obsidian team)
+- **Rider** (official from JetBrains)
 
-### DNF (for system packages & frameworks)
-Used for:
-- Languages and frameworks (Rust, .NET, etc.)
-- System utilities and libraries
-- Official vendor repositories (Docker, VS Code, Spotify, Mullvad)
-- RPM Fusion packages (Steam)
+### DNF (for System Packages & Development Frameworks)
+Used for core development tools and official vendor repositories:
+- **Languages**: Rust, Python, Go, PHP (system packages)
+- **Tools**: Git, Docker (from official vendor repos), VS Code, Spotify, Mullvad
+- **Libraries**: Build tools, development headers, system utilities
+- **Gaming**: Steam (via RPM Fusion)
 
-### Other Methods
-- **NVM**: For Node.js version management
-- **Rustup**: For Rust toolchain (Fedora's recommended approach)
-- **Official Downloads**: For tools without verified Flatpaks or repositories (Postman, Godot, Zoom)
+### Version Managers
+Provides flexible version switching without system dependency conflicts:
+- **NVM** (Node Version Manager) - Switch between Node.js versions easily
+- **Rustup** (Rust toolchain manager) - Recommended by Fedora for Rust
+
+### Official Releases
+Direct downloads from official sources when no repository/Flatpak exists:
+- **Postman** - Downloaded as tarball from official site
+- **Godot 4 Mono** - Latest release from GitHub
+- **Zoom** - Official RPM from vendor
+
+## Why These Dotfiles?
+
+This repository solves several common problems for Fedora developers:
+
+- **Complete Setup in One Command**: No need to remember which tools to install or how to configure them
+- **Sensible Defaults**: Carefully configured editors, shell, and tools that work well together
+- **Version Management**: Node.js and Rust use version managers, not system packages (easier to update)
+- **Consistent Environment**: Same configurations across multiple machines by cloning this repo
+- **Well-Documented**: Each script is clear about what it's doing and why
+- **Modular Design**: Run individual scripts or the full bootstrap—your choice
+
+## For Existing Fedora Users
+
+If you already have Fedora installed, you can:
+1. Clone this repository
+2. Run `bash scripts/bootstrap.sh` to install and configure everything
+3. Your existing home directory data is preserved (dotfiles are symlinked, not copied)
+
+Or selectively install by running individual setup scripts in `scripts/`.
+
+## Customization
+
+The configuration files are designed to be starting points. Feel free to:
+- Edit `.bashrc` to add your own aliases
+- Modify `.config/nvim/init.lua` for Neovim plugins
+- Adjust `.config/starship.toml` for your preferred prompt style
+- Customize `.config/alacritty/alacritty.toml` for terminal appearance
 
 ## License
 
