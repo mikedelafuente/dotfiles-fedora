@@ -79,7 +79,7 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
     
     # Update global npm packages
     print_info_message "Updating global npm packages..."
-    npm update -g
+    sudo npm update -g
 else
     print_info_message "NVM not installed, skipping Node.js updates"
 fi
